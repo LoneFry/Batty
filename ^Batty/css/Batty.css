@@ -1,0 +1,152 @@
+.Batty_tableWrapper {
+	border: 1px outset #ccc;
+	background-color: #fbfbfb;
+	padding: 8px;
+	border-radius: 6px;
+}
+
+.Batty_tableWrapper table {
+	-border-collapse: collapse;
+	border-spacing: 0;
+	width: 100%;
+}
+
+.Batty_tableWrapper table th {
+	border: 1px outset #ccc;
+	background-color: #edeeed;
+}
+
+.Batty_tableWrapper table td {
+	border: 1px solid #ccc;
+	background-color: #fff;
+}
+
+.Batty_section {
+	margin: 8px;
+}
+
+#Batty_Project {
+	width: 950px;
+}
+
+#Batty_Project table input {
+	width: 700px;
+}
+
+#Batty_Project table th {
+	text-align: right;
+	vertical-align: top;
+	width: 100px;
+}
+
+#Batty_byReporter {
+	width: 466px;
+	float: left;
+	clear: left;
+}
+
+#Batty_byReporter .Batty_tableWrapper {
+	max-height: 300px;
+	overflow: auto;
+}
+
+#Batty_byHandler {
+	width: 466px;
+	float: left;
+}
+
+#Batty_byHandler .Batty_tableWrapper {
+	max-height: 300px;
+	overflow: auto;
+}
+
+#Batty_byOpen {
+	width: 950px;
+	float: left;
+}
+
+#Batty_byOpen .Batty_tableWrapper {
+	max-height: 300px;
+	overflow: auto;
+}
+
+div#Batty_issueID {
+	float: left;
+	width: 134px;
+	margin: 0 8px;
+}
+
+div#Batty_issueID a {
+	text-decoration: none;
+	font: bold 40pt Tahoma;
+}
+
+div#Batty_issueID a:hover {
+	text-decoration: underline;
+}
+
+div#Batty_issueID + div {
+	margin-left: 150px;
+}
+
+div.Batty_section h3 {
+	margin-bottom: 0;
+}
+
+.Batty_issueComment {
+	white-space: pre-wrap;
+	font-family: monospace;
+}
+
+.Batty_issue textarea {
+	width: 822px;
+	height: 300px;
+	font-family: monospace;
+	font-size: 11pt;
+}
+
+.Batty_issueComment {
+	font-family: monospace;
+	font-size: 11pt;
+}
+
+.Batty_issue {
+	width: 850px;
+}
+
+.Batty_Body {
+	min-height: 600px;
+}
+
+.Batty_Body h3, .Batty_h3, .Batty_h3 * {
+	font: bold 14pt Tahoma;
+}
+
+.Batty_h3 input {
+	width: 720px;
+}
+
+#Batty_Report_label span {
+	display: inline-block;
+	width: 110px;
+}
+
+div.Batty_byLine {
+	float: left; width: 134px;
+	margin: 0 8px;
+}
+
+div.Batty_byLine + div {
+	margin-left: 150px;
+}
+
+.Batty_issueChanges {
+	white-space: pre-wrap;
+}
+
+div.Batty_section + hr {
+	clear: both;
+}
+
+div#footer { margin-top: 200px; }
+
