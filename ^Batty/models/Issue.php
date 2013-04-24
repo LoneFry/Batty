@@ -152,6 +152,15 @@ class Issue extends Record {
 	}
 
 	/**
+	 * return a padded issue_id suitable for display
+	 *
+	 * @return string
+	 */
+	public function num() {
+		return str_pad($this->issue_id, 4, 0, STR_PAD_LEFT);
+	}
+
+	/**
 	 * Create table in database
 	 *
 	 * @return void

@@ -121,6 +121,19 @@ class IssueReport extends Report {
 
 		return $R->toArray();
 	}
+
+	/**
+	 * Add a padded issue number for each issue_id
+	 *
+	 * @return void
+	 */
+	public function onload() {
+		if (is_array($this->_data)) {
+			foreach ($this->_data as $k => $v) {
+				$this->_data[$k]['num'] = str_pad($v['issue_id'], 4, 0, STR_PAD_LEFT);
+			}
+		}
+	}
 }
 
 IssueReport::prime();

@@ -25,7 +25,7 @@
 				?>
 				<tr>
 					<td>
-						<a href="/Batty/issue/<?php html($issue['issue_id']); ?>"><?php html($issue['issue_id']);?></a>
+						<a href="/Batty/issue/<?php html($issue['issue_id']); ?>"><?php html($issue['num']);?></a>
 					</td>
 					<td>
 						<a href="/Batty/user/<?php html($issue['reporter_id']); ?>"><?php html($issue['reporter']);?></a>

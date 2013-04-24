@@ -9,8 +9,7 @@
 </div>
 
 <div id="Batty_issueID">
-	<a href="/Batty/issue/<?php html($issue->issue_id); ?>"><?php html(str_pad($issue->issue_id, 4, 0,
-			STR_PAD_LEFT));?></a>
+	<a href="/Batty/issue/<?php html($issue->issue_id); ?>"><?php html($issue->num);?></a>
 </div>
 
 <div class="Batty_section Batty_issue">
