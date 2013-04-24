@@ -35,7 +35,10 @@ class Issue extends Record {
 		'description'   => array('type' => 's', 'min' => 0, 'max' => 65535),
 		'type'          => array('type' => 'e', 'values' => array('Bug', 'Feature')),
 		'priority'      => array('type' => 'i', 'min' => 1),
-		'status'        => array('type' => 'e', 'values' => array('New', 'Open', 'Closed'), 'def' => 'New'),
+		'status'        => array(
+			'type' => 'e', 'values' => array('New', 'In Progress', 'Under Review', 'Completed', 'Abandoned'),
+			'def'  => 'New'
+		),
 		'reporter_id'   => array('type' => 'i', 'min' => 0),
 		'handler_id'    => array('type' => 'i', 'min' => 0),
 		'iCreateDate'   => array('type' => 'ts'),
@@ -161,7 +164,7 @@ class Issue extends Record {
 			." `description` MEDIUMTEXT NOT NULL,"
 			." `type` ENUM('Bug', 'Feature') NOT NULL,"
 			." `priority` TINYINT UNSIGNED NOT NULL,"
-			." `status` ENUM('New', 'Open', 'Closed') NOT NULL,"
+			." `status` ENUM('New', 'In Progress', 'Under Review', 'Completed', 'Abandoned') NOT NULL,"
 			." `reporter_id` INT UNSIGNED NOT NULL,"
 			." `handler_id` INT UNSIGNED NOT NULL,"
 			." `iCreateDate` INT UNSIGNED NOT NULL,"

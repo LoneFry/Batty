@@ -159,6 +159,11 @@ class BattyController extends Controller {
 			if (isset($update->changes['handler_id'])) {
 				$issue->iAssignDate = NOW;
 			}
+			if (isset($update->changes['status'])
+				&& in_array($update->changes['status'], array('Completed', 'Abandoned'))
+			) {
+				$issue->iClosedDate = NOW;
+			}
 			if (0 == $issue->project_id) {
 				G::msg('You must select a project', 'error');
 			} elseif (0 == $issue->priority) {

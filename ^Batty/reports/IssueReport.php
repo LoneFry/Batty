@@ -32,7 +32,7 @@ class IssueReport extends Report {
 		'project_id'  => array('type' => 'i', 'sql' => '`project_id` = %d'),
 		'reporter_id' => array('type' => 'i', 'sql' => '`reporter_id` = %d'),
 		'handler_id'  => array('type' => 'i', 'sql' => '`handler_id` = %d'),
-		'open'        => array('type' => 'i', 'sql' => '(`status` IN (\'New\', \'Open\') = %d)'),
+		'open'        => array('type' => 'i', 'sql' => '(`status` IN (\'New\', \'In Progress\', \'Under Review\') = %d)'),
 	);
 
 	/**
