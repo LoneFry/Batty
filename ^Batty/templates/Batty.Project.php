@@ -33,51 +33,16 @@
 			</form>
 		</div>
 	</div>
-	<div class="Batty_section" id="Batty_byOpen">
+	<div class="Batty_section Batty_issueList" id="Batty_byOpen">
 		<h3>Issues</h3>
-
-		<div class="Batty_tableWrapper">
-			<?php
-			if (!isset($byProject) || !is_array($byProject) || !count($byProject)) {
-				?>
-				<p>I don't have any issues!</p>
-			<?php
-			} else {
-				?>
-				<table>
-					<thead>
-					<tr>
-						<th>Id</th>
-						<th>Reporter</th>
-						<th>Handler</th>
-						<th>Status</th>
-						<th>Updated</th>
-						<th>Label</th>
-					</tr>
-					</thead>
-					<tbody>
-					<?php
-					foreach ($byProject as $k => $issue) {
-						?>
-						<tr>
-							<td>
-								<a href="/Batty/issue/<?php html($issue['issue_id']); ?>"><?php html($issue['issue_id']);?></a>
-							</td>
-							<td><?php html($issue['reporter']);?></td>
-							<td><?php html($issue['handler']);?></td>
-							<td><?php html($issue['status']);?></td>
-							<td><?php echo date('Y-m-d H:i:s', strtotime($issue['recordChanged']));?></td>
-							<td><?php html($issue['label']);?></td>
-						</tr>
-					<?php
-					}
-					?>
-					</tbody>
-				</table>
-			<?php
-			}
-			?>
-		</div>
+		<?php
+		if (!isset($byProject) || !is_array($byProject)) {
+			$aIssues = array();
+		} else {
+			$aIssues = $byProject;
+		}
+		include 'Batty.issueTable.php';
+		?>
 	</div>
 
 </div>

@@ -39,33 +39,11 @@
 	width: 100px;
 }
 
-#Batty_byReporter {
-	width: 466px;
-	float: left;
-	clear: left;
-}
-
-#Batty_byReporter .Batty_tableWrapper {
-	max-height: 300px;
-	overflow: auto;
-}
-
-#Batty_byHandler {
-	width: 466px;
-	float: left;
-}
-
-#Batty_byHandler .Batty_tableWrapper {
-	max-height: 300px;
-	overflow: auto;
-}
-
-#Batty_byOpen {
+.Batty_issueList {
 	width: 950px;
-	float: left;
 }
 
-#Batty_byOpen .Batty_tableWrapper {
+.Batty_issueList .Batty_tableWrapper {
 	max-height: 300px;
 	overflow: auto;
 }

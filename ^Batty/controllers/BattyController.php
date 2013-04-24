@@ -40,6 +40,7 @@ class BattyController extends Controller {
 		parent::__construct($argv);
 
 		G::$V->_style('/^Batty/css/Batty.css');
+		G::$V->priorities = G::$G['Batty']['priorities'];
 	}
 
 	/**
@@ -212,7 +213,6 @@ class BattyController extends Controller {
 		G::$V->handler    = !G::$V->issue->handler_id ? new Login() : Login::byPK(G::$V->issue->handler_id);
 		G::$V->types      = Issue::getTypes();
 		G::$V->statuses   = Issue::getStatuses();
-		G::$V->priorities = G::$G['Batty']['priorities'];
 		G::$V->projects   = Project::all();
 		G::$V->updates    = Update::byIssue(G::$V->issue->issue_id);
 		G::$V->_title     = 'Batty : Issue';
@@ -275,7 +275,6 @@ class BattyController extends Controller {
 
 		G::$V->users      = $users;
 		G::$V->types      = Issue::getTypes();
-		G::$V->priorities = G::$G['Batty']['priorities'];
 		G::$V->projects   = Project::all();
 		G::$V->issue      = $issue;
 		G::$V->_title     = 'Batty : Report Issue';
