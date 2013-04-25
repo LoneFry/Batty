@@ -41,6 +41,7 @@ class BattyController extends Controller {
 
 		G::$V->_style('/^Batty/css/Batty.css');
 		G::$V->priorities = G::$G['Batty']['priorities'];
+		G::$V->projects = Project::all();
 	}
 
 	/**
@@ -213,7 +214,6 @@ class BattyController extends Controller {
 		G::$V->handler    = !G::$V->issue->handler_id ? new Login() : Login::byPK(G::$V->issue->handler_id);
 		G::$V->types      = Issue::getTypes();
 		G::$V->statuses   = Issue::getStatuses();
-		G::$V->projects   = Project::all();
 		G::$V->updates    = Update::byIssue(G::$V->issue->issue_id);
 		G::$V->_title     = 'Batty : Issue';
 		G::$V->_template  = 'Batty.Issue.php';
@@ -275,7 +275,6 @@ class BattyController extends Controller {
 
 		G::$V->users      = $users;
 		G::$V->types      = Issue::getTypes();
-		G::$V->projects   = Project::all();
 		G::$V->issue      = $issue;
 		G::$V->_title     = 'Batty : Report Issue';
 		G::$V->_template  = 'Batty.Report.php';
@@ -293,7 +292,6 @@ class BattyController extends Controller {
 			return $this->do_403($argv);
 		}
 
-		G::$V->projects  = Project::all();
 		G::$V->_title    = 'Batty : Projects';
 		G::$V->_template = 'Batty.Projects.php';
 	}
@@ -346,7 +344,6 @@ class BattyController extends Controller {
 
 		G::$V->byProject = IssueReport::byProject($project->project_id);
 		G::$V->project   = $project;
-		G::$V->projects  = Project::all();
 		G::$V->_title    = 'Batty : Project';
 		G::$V->_template = 'Batty.Project.php';
 	}

@@ -41,9 +41,9 @@ class IssueReport extends Report {
 	 * @return void
 	 */
 	public static function prime() {
-		self::$query = "SELECT i.`issue_id`, i.`label`, i.`description`, i.`type`, i.`priority`, i.`status`,"
-			." i.`reporter_id`, i.`handler_id`, i.`iCreateDate`, i.`recordChanged`,"
-			." l1.`loginname` as `reporter`, l2.`loginname` as `handler`"
+		self::$query = "SELECT i.`issue_id`, i.`project_id`, i.`label`, i.`description`, i.`type`, i.`priority`,"
+			." i.`status`, i.`reporter_id`, i.`handler_id`, i.`iCreateDate`, i.`iAssignDate`, i.`iClosedDate`,"
+			." i.`recordChanged`, l1.`loginname` as `reporter`, l2.`loginname` as `handler`"
 			." FROM `".Issue::getTable()."` i"
 			." LEFT JOIN `".Login::getTable()."` l1 ON i.reporter_id = l1.login_id"
 			." LEFT JOIN `".Login::getTable()."` l2 ON i.handler_id = l2.login_id"

@@ -12,6 +12,7 @@
 				<th>Id</th>
 				<th>Reporter</th>
 				<th>Handler</th>
+				<th>Project</th>
 				<th>Type</th>
 				<th>Status</th>
 				<th>Priority</th>
@@ -30,11 +31,18 @@
 					<td>
 						<a href="/Batty/user/<?php html($issue['reporter_id']); ?>"><?php html($issue['reporter']);?></a>
 					</td>
-					<td>
+					<td title="<?php if ($issue['iAssignDate']) {
+						echo 'as of '.date('Y-m-d H:i:s', $issue['iAssignDate']);
+					} ?>">
 						<a href="/Batty/user/<?php html($issue['handler_id']); ?>"><?php html($issue['handler']);?></a>
 					</td>
+					<td><?php html($projects[$issue['project_id']]->label);?></td>
 					<td><?php html($issue['type']);?></td>
-					<td><?php html($issue['status']);?></td>
+					<td title="<?php if ($issue['iClosedDate'] && in_array($issue['status'],
+						array('Completed', 'Abandoned'))
+					) {
+						echo 'as of '.date('Y-m-d H:i:s', $issue['iClosedDate']);
+					} ?>"><?php html($issue['status']);?></td>
 					<td title="<?php html($priorities[$issue['priority']]); ?>"><?php html($issue['priority']);?></td>
 					<td><?php echo date('Y-m-d H:i:s', strtotime($issue['recordChanged']));?></td>
 					<td><?php html($issue['label']);?></td>
