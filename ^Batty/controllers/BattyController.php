@@ -197,9 +197,9 @@ class BattyController extends Controller {
 							.'<a href="http://'.$_SERVER['SERVER_NAME'].'/Batty/issue/'.$issue->issue_id.'">'
 							.'#'.$issue->issue_id.': '.$issue->label.'</a><br><br>'
 							.'<b>Comment:</b>'
-							.'<pre style="white-space:pre-wrap;">'.$update->comment.'</pre>'
+							.'<pre style="white-space:pre-wrap;">'.htmlspecialchars($update->comment).'</pre>'
 							.'<b>Changes:</b>'
-							.'<pre style="white-space:pre-wrap;">'.print_r($update->changes, 1).'</pre>';
+							.'<pre style="white-space:pre-wrap;">'.print_r(array_map('htmlspecialchars', $update->changes), 1).'</pre>';
 						mail($to, $subject, $body, 'From: "Batty" <'.G::$G['siteEmail'].">\r\nContent-Type: text/html");
 					}
 				} else {
