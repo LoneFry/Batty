@@ -42,9 +42,10 @@
 						array('Completed', 'Abandoned'))
 					) {
 						echo 'as of '.date('Y-m-d H:i:s', $issue['iClosedDate']);
-					} ?>"><?php html($issue['status']);?></td>
+					} ?>"><?php echo str_replace(' ', '&nbsp;', htmlspecialchars($issue['status']));?></td>
 					<td title="<?php html($priorities[$issue['priority']]); ?>"><?php html($issue['priority']);?></td>
-					<td><?php echo date('Y-m-d H:i:s', strtotime($issue['recordChanged']));?></td>
+					<td title="<?php echo date('Y-m-d H:i:s', strtotime($issue['recordChanged'])); ?>"><?php
+						echo str_replace(' ', '&nbsp;', date('Y-m-d H:i', strtotime($issue['recordChanged'])));?></td>
 					<td><?php html($issue['label']);?></td>
 				</tr>
 			<?php
