@@ -128,7 +128,15 @@
 <script type="text/javascript">
 	function Batty_type_change(oSelect) {
 		var oTextarea = document.getElementById('description');
-		var defaultBug = 'Full steps to reproduce the bug:\n' + '--------------------------------\n\n\n\n' + 'Expected behavior:\n' + '------------------\n\n\n\n' + 'Buggy behavior:\n' + '---------------\n';
+		var defaultBug = 'Full steps to reproduce the bug:\n'
+			+ '--------------------------------\n'
+			+ '[Enter details here]\n\n\n\n'
+			+ 'Expected behavior:\n'
+			+ '------------------\n'
+			+ '[Enter details here]\n\n\n\n'
+			+ 'Buggy behavior:\n'
+			+ '---------------\n'
+			+ '[Enter details here]\n';
 		var defaultFeature = 'In order to [what?]\nAs a [who?]\nI want to [how?]';
 		if ('Bug' == oSelect.value && ('' == oTextarea.value || defaultFeature == oTextarea.value)) {
 			oTextarea.value = defaultBug;
