@@ -34,6 +34,7 @@ class IssueReport extends Report {
 		'handler_id'  => array('type' => 'i', 'sql' => '`handler_id` = %d'),
 		'open'        => array('type' => 'i', 'sql' => '(`status` IN (\'New\', \'In Progress\', \'Under Review\') = %d)'),
 	);
+	protected $_orders = array('recordChanged', 'priority', 'status', 'type');
 
 	/**
 	 * Initializes static properties
@@ -51,18 +52,20 @@ class IssueReport extends Report {
 	}
 
 	/**
-	 * Report leads for specified project
+	 * Report issues for specified project
 	 *
 	 * @param int $project_id The project_id to report issues for
+	 * @param int $open Flag indicating whether to return open or closed issues
 	 *
 	 * @return array
 	 */
-	public static function byProject($project_id) {
+	public static function byProject($project_id, $open = null) {
 		if (!is_numeric($project_id)) {
 			return false;
 		}
 
 		$R = new static(array('project_id' => $project_id));
+		$R->open = $open;
 		$R->load();
 
 		return $R->toArray();
@@ -72,28 +75,31 @@ class IssueReport extends Report {
 	 * Report leads for specified reporter
 	 *
 	 * @param int $reporter_id the reporter_id to report issues for
+	 * @param int $open Flag indicating whether to return open or closed issues
 	 *
 	 * @return bool
 	 */
-	public static function byReporter($reporter_id) {
+	public static function byReporter($reporter_id, $open = null) {
 		if (!is_numeric($reporter_id)) {
 			return false;
 		}
 
 		$R = new static(array('reporter_id' => $reporter_id));
+		$R->open = $open;
 		$R->load();
 
 		return $R->toArray();
 	}
 
 	/**
-	 * Report leads for specified handler
+	 * Report issues for specified handler
 	 *
 	 * @param int $handler_id the handler_id to report issues for
+	 * @param int $open Flag indicating whether to return open or closed issues
 	 *
 	 * @return bool
 	 */
-	public static function byHandler($handler_id) {
+	public static function byHandler($handler_id, $open = null) {
 		if (!is_numeric($handler_id)) {
 			trigger_error($handler_id);
 
@@ -101,13 +107,14 @@ class IssueReport extends Report {
 		}
 
 		$R = new static(array('handler_id' => $handler_id));
+		$R->open = $open;
 		$R->load();
 
 		return $R->toArray();
 	}
 
 	/**
-	 * Report open leads
+	 * Report open issues
 	 *
 	 * @param int $open Flag indicating whether to return open or closed issues
 	 *
@@ -117,6 +124,24 @@ class IssueReport extends Report {
 		$open = (int)$open;
 
 		$R = new static(array('open' => $open));
+		$R->load();
+
+		return $R->toArray();
+	}
+
+	/**
+	 * Report recent issues
+	 *
+	 * @param int $count How many recent issues to return
+	 *
+	 * @return mixed
+	 */
+	public static function byRecent($count = 30) {
+		$R = new static();
+		$R->open = 0;
+		$R->_order = 'recordChanged';
+		$R->_asc = false;
+		$R->_count = $count;
 		$R->load();
 
 		return $R->toArray();

@@ -59,9 +59,10 @@ class BattyController extends Controller {
 		G::$V->_template = 'Batty.Home.php';
 
 		require_once dirname(__DIR__).'/reports/IssueReport.php';
-		G::$V->byHandler  = IssueReport::byHandler(G::$S->Login->login_id);
-		G::$V->byReporter = IssueReport::byReporter(G::$S->Login->login_id);
-		G::$V->openIssues = IssueReport::byOpen();
+		G::$V->byHandler    = IssueReport::byHandler(G::$S->Login->login_id, true);
+		G::$V->byReporter   = IssueReport::byReporter(G::$S->Login->login_id, true);
+		G::$V->openIssues   = IssueReport::byOpen();
+		G::$V->recentIssues = IssueReport::byRecent();
 	}
 
 	/**

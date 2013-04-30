@@ -10,7 +10,7 @@
 	</div>
 
 	<div class="Batty_section Batty_issueList" id="Batty_byHandler">
-		<h3>Issues Assigned To You</h3>
+		<h3>Open Issues Assigned To You</h3>
 		<?php
 		if (!isset($byHandler) || !is_array($byHandler)) {
 			$aIssues = array();
@@ -21,7 +21,7 @@
 		?>
 	</div>
 	<div class="Batty_section Batty_issueList" id="Batty_byReporter">
-		<h3>Issues Reported By You</h3>
+		<h3>Open Issues Reported By You</h3>
 		<?php
 		if (!isset($byReporter) || !is_array($byReporter)) {
 			$aIssues = array();
@@ -32,12 +32,23 @@
 		?>
 	</div>
 	<div class="Batty_section Batty_issueList" id="Batty_byOpen">
-		<h3>Issues</h3>
+		<h3>Open Issues</h3>
 		<?php
 		if (!isset($openIssues) || !is_array($openIssues)) {
 			$aIssues = array();
 		} else {
 			$aIssues = $openIssues;
+		}
+		include 'Batty.issueTable.php';
+		?>
+	</div>
+	<div class="Batty_section Batty_issueList" id="Batty_byRecent">
+		<h3>Recent Issues</h3>
+		<?php
+		if (!isset($recentIssues) || !is_array($recentIssues)) {
+			$aIssues = array();
+		} else {
+			$aIssues = $recentIssues;
 		}
 		include 'Batty.issueTable.php';
 		?>
