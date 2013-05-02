@@ -193,7 +193,7 @@ class BattyController extends Controller {
 					$emails = $issue->getSubscriberEmails();
 					if ($emails) {
 						$to      = implode(',', $emails);
-						$subject = 'Batty issue #'.$issue->issue_id.' updated';
+						$subject = 'Updated Batty #'.$issue->num.': '.$issue->label;
 						$body    = 'A new update has been submitted to an issue you subscribe to<br>'
 							.'<a href="http://'.$_SERVER['SERVER_NAME'].'/Batty/issue/'.$issue->issue_id.'">'
 							.'#'.$issue->issue_id.': '.$issue->label.'</a><br><br>'
