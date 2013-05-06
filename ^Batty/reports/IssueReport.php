@@ -36,6 +36,8 @@ class IssueReport extends Report {
 	);
 	protected $_orders = array('recordChanged', 'priority', 'status', 'type');
 
+	protected $_order = "(`status` IN ('Completed', 'Abandoned')), (`type` = 'Bug') DESC, `priority`, 'project_id'";
+
 	/**
 	 * Initializes static properties
 	 *
