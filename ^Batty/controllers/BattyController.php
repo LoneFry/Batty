@@ -190,7 +190,7 @@ class BattyController extends Controller {
 						G::msg('Failed to update issue.', 'error');
 					}
 
-					$emails = $issue->getSubscriberEmails();
+					$emails = $issue->getSubscriberEmails(G::$S->Login->login_id);
 					if ($emails) {
 						$to      = implode(',', $emails);
 						$subject = 'Updated Batty #'.$issue->num.': '.$issue->label;

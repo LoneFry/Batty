@@ -130,14 +130,17 @@ class Issue extends Record {
 	/**
 	 * Get all logins' email addresses associated with this issue
 	 *
+	 * @param int $exclude A login_id to exclude, typically current user
+	 *
 	 * @return array list of email addresses
 	 */
-	public function getSubscriberEmails() {
+	public function getSubscriberEmails($exclude = null) {
 		$query = "SELECT `email` "
 			." FROM `".Login::getTable()."` l"
 			." LEFT JOIN `".Update::getTable()."` u ON u.`login_id` = l.`login_id`"
-			." WHERE u.`issue_id` = ".$this->issue_id
-			."  OR l.login_id IN (".$this->handler_id.",".$this->reporter_id.")"
+			." WHERE (u.`issue_id` = ".$this->issue_id
+			."  OR l.`login_id` IN (".$this->handler_id.",".$this->reporter_id."))"
+			.(!is_numeric($exclude) ? '' : " AND l.`login_id` != ".(int)$exclude)
 			." GROUP BY `l`.`email`";
 
 		if (false === $result = G::$m->query($query)) {
