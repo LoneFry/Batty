@@ -7,6 +7,7 @@
 		<a href="/Batty/projects">Projects</a>
 	</div>
 
+<?php if (G::$S->roleTest('Batty/Admin')) { ?>
 	<div class="Batty_section" id="Batty_Project">
 		<h3><?php echo $project->project_id ? 'Edit' : 'Add'; ?> Project</h3>
 
@@ -33,6 +34,8 @@
 			</form>
 		</div>
 	</div>
+<?php } ?>
+
 	<div class="Batty_section Batty_issueList" id="Batty_byOpen">
 		<h3>Issues</h3>
 		<?php

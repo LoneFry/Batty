@@ -319,7 +319,8 @@ class BattyController extends Controller {
 		} else {
 			$project = new Project(true);
 		}
-		if (isset($_POST['label'])
+		if (G::$S->roleTest(self::$role.'/Admin')
+			&& isset($_POST['label'])
 			&& isset($_POST['description'])
 		) {
 			$project->label       = $_POST['label'];
