@@ -45,8 +45,12 @@
 }
 
 .Batty_issueList .Batty_tableWrapper {
-	max-height: 300px;
 	overflow: auto;
+}
+
+.Batty_issueList#Batty_byHandler .Batty_tableWrapper,
+.Batty_issueList#Batty_byReporter .Batty_tableWrapper {
+	max-height: 300px;
 }
 
 div#Batty_issueID {
