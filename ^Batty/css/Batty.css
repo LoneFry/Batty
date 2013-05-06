@@ -129,3 +129,8 @@ div.Batty_section + hr {
 
 div#footer { margin-top: 200px; }
 
+a.Batty_incognito:not(:hover) {
+	text-decoration: none;
+	color: inherit;
+}
+
