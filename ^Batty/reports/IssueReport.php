@@ -57,7 +57,7 @@ class IssueReport extends Report {
 	 * Report issues for specified project
 	 *
 	 * @param int $project_id The project_id to report issues for
-	 * @param int $open Flag indicating whether to return open or closed issues
+	 * @param int $open       Flag indicating whether to return open or closed issues
 	 *
 	 * @return array
 	 */
@@ -77,7 +77,7 @@ class IssueReport extends Report {
 	 * Report leads for specified reporter
 	 *
 	 * @param int $reporter_id the reporter_id to report issues for
-	 * @param int $open Flag indicating whether to return open or closed issues
+	 * @param int $open        Flag indicating whether to return open or closed issues
 	 *
 	 * @return bool
 	 */
@@ -97,7 +97,7 @@ class IssueReport extends Report {
 	 * Report issues for specified handler
 	 *
 	 * @param int $handler_id the handler_id to report issues for
-	 * @param int $open Flag indicating whether to return open or closed issues
+	 * @param int $open       Flag indicating whether to return open or closed issues
 	 *
 	 * @return bool
 	 */
