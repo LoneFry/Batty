@@ -29,7 +29,7 @@ class Update extends Record {
 	protected static $pkey = 'update_id';
 	protected static $query = '';
 	protected static $vars = array(
-		'update_id'     => array('type' => 'i', 'min' => 0, 'max' => 255),
+		'update_id'     => array('type' => 'i', 'min' => 0),
 		'issue_id'      => array('type' => 'i', 'min' => 0),
 		'comment'       => array('type' => 's', 'min' => 0, 'max' => 65535),
 		'changes'       => array('type' => 'o', 'min' => 0, 'max' => 65535),
