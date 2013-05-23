@@ -231,7 +231,7 @@ if (isset($updates) && is_array($updates)) {
 				</tr>
 				<tr>
 					<td colspan="4">
-						<textarea name="comment"></textarea>
+						<textarea name="comment" maxlength="65535"></textarea>
 					</td>
 				</tr>
 				<tr>
@@ -248,5 +248,5 @@ if (isset($updates) && is_array($updates)) {
 </form>
 
 </div>
-
+<script type="text/javascript" src="/^Batty/js/charsRemaining.js"></script>
 <?php get_footer(); ?>

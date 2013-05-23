@@ -15,7 +15,7 @@
 
 		<div class="Batty_section Batty_issue">
 			<label class="Batty_h3" id="Batty_Report_label"><span>Issue Title:</span>
-				<input type="text" name="label" value="<?php html($issue->label); ?>">
+				<input type="text" name="label" value="<?php html($issue->label); ?>" maxlength="50">
 			</label>
 
 			<div class="Batty_tableWrapper">
@@ -113,8 +113,10 @@
 						<td><br></td>
 					</tr>
 					<tr>
-						<td colspan="4"><textarea name="description"
-						                          id="description"><?php html($issue->description); ?></textarea></td>
+						<td colspan="4">
+							<textarea name="description" id="description" maxlength="65535"
+								><?php html($issue->description); ?></textarea>
+						</td>
 					</tr>
 					<tr>
 						<td colspan="4"><input type="submit" value="Report Issue"></td>
@@ -147,4 +149,5 @@
 		}
 	}
 </script>
+<script type="text/javascript" src="/^Batty/js/charsRemaining.js"></script>
 <?php get_footer(); ?>

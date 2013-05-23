@@ -109,7 +109,7 @@ div.Batty_section h3 {
 	width: 720px;
 }
 
-#Batty_Report_label span {
+#Batty_Report_label>:first-child {
 	display: inline-block;
 	width: 110px;
 }
@@ -138,3 +138,8 @@ a.Batty_incognito:not(:hover) {
 	color: inherit;
 }
 
+span.js-charsRemaining {
+	font: bold 14pt Georgia, serif;
+	color: #ccc;
+	margin: -2px 4px;
+}
