@@ -3,7 +3,7 @@
 
 	<h2>Batty : Report Issue</h2>
 
-	<div id="batty_nav">
+	<div id="Batty_nav">
 		<a href="/Batty/home">Home</a>
 		<a href="/Batty/report">Report an Issue</a>
 	</div>
@@ -11,6 +11,18 @@
 	<form method="POST" action="/Batty/report">
 		<div id="Batty_issueID">
 			<a href="/Batty/report">New</a>
+		</div>
+
+		<div id="Batty_Subscriber_Status">
+			<label>Alert Me When:
+				<select name="level" class="Batty_Issue_Select">
+					<option value="allUpdates"<?php echo $subscr->level == 'allUpdates' && is_numeric($subscr->subscription_id)?' selected':''; ?>>Issue is updated</option>
+					<option value="statusChange"<?php echo $subscr->level == 'statusChange'?' selected':''; ?>>Status is changed</option>
+					<option value="closed"<?php echo $subscr->level == 'closed'?' selected':''; ?>>Issue is closed</option>
+					<option value="none"<?php echo $subscr->level == 'none'?' selected':''; ?>>Never</option>
+					<option value="projectLevel"<?php echo $subscr->level == 'projectLevel'?' selected':''; ?>>[Use My Project Setting]</option>
+				</select>
+			</label>
 		</div>
 
 		<div class="Batty_section Batty_issue">
@@ -119,7 +131,9 @@
 						</td>
 					</tr>
 					<tr>
-						<td colspan="4"><input type="submit" value="Report Issue"></td>
+						<td colspan="4">
+							<input type="submit" value="Report Issue">
+						</td>
 					</tr>
 				</table>
 			</div>

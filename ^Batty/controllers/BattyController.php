@@ -16,6 +16,7 @@ require_once SITE.CORE.'/models/Role.php';
 require_once dirname(__DIR__).'/models/Project.php';
 require_once dirname(__DIR__).'/models/Issue.php';
 require_once dirname(__DIR__).'/models/Update.php';
+require_once dirname(__DIR__).'/models/Subscription.php';
 
 /**
  * Class BattyController
@@ -134,10 +135,23 @@ class BattyController extends Controller {
 			return $this->do_report($argv);
 		}
 
+		//Include batty.js in template
+		G::$V->_script('/^Batty/js/batty.js');
+
 		$issue = Issue::byPK($argv[1]);
 		$Role  = new Role(array('label' => 'Batty'));
 		$Role->fill();
 		$users = $Role->getMembers('loginname');
+
+		//Check to see if an existing subscription exists
+		$subscr = new IssueSubscription(array('login_id' => G::$S->Login->login_id, 'issue_id' => $issue->issue_id));
+		$subscr->fill();
+
+		if (!is_null($subscr->subscription_id)) {
+			//Updates the lastSeen time
+			$subscr->lastSeen = NOW;
+			$subscr->save();
+		}
 
 		if (isset($_POST['issue_id']) && is_numeric($_POST['issue_id']) && $_POST['issue_id'] == $issue->issue_id
 			&& isset($_POST['project_id']) && is_numeric($_POST['project_id'])
@@ -184,14 +198,47 @@ class BattyController extends Controller {
 					G::msg('Update saved with ID '.$id);
 					if ($result = $issue->update()) {
 						G::msg('Issue updated');
+
+						//IF handler changed, change subscription
+						if (isset($diff['handler_id'])
+							&& false === IssueSubscription::subscribe($issue->handler_id, $issue->issue_id)
+						) {
+							G::msg('Could not subscribe new assignee.', 'error');
+						}
 					} elseif (null === $result) {
 						G::msg('No changes to issue detected.');
 					} else {
 						G::msg('Failed to update issue.', 'error');
 					}
 
-					$emails = $issue->getSubscriberEmails(G::$S->Login->login_id);
-					if ($emails) {
+					//IF current user not already subscribed, subscribe
+					if (is_null($subscr->subscription_id)) {
+						$subscr->level = 'allUpdates';
+						$subscr->lastSeen = NOW;
+						$subscr->save();
+						G::msg('You have been subscribed to all updates for this issue.');
+					}
+
+					//IF the issue was closed
+					if ($issue->iClosedDate > NOW - 2) {
+						$change = 'closed';
+					//IF the status was changed
+					} elseif (isset($diff['status'])) {
+						$change = 'status';
+					//ELSE any other change
+					} else {
+						$change = 'other';
+					}
+
+					//Grabs the subscriber's emails
+					$emails = Subscription::getSubscriberEmails(
+						$change,
+						$issue->issue_id,
+						$issue->project_id,
+						G::$S->Login->login_id
+					);
+
+					if (is_array($emails) && count($emails)) {
 						$to      = implode(',', $emails);
 						$subject = 'Updated Batty #'.$issue->num.': '.$issue->label;
 						$body    = 'A new update has been submitted to an issue you subscribe to<br>'
@@ -209,6 +256,7 @@ class BattyController extends Controller {
 			}
 		}
 
+		G::$V->subscr     = $subscr;
 		G::$V->users      = $users;
 		G::$V->issue      = $issue;
 		G::$V->reporter   = !G::$V->issue->reporter_id ? new Login() : Login::byPK(G::$V->issue->reporter_id);
@@ -238,15 +286,22 @@ class BattyController extends Controller {
 		$Role->fill();
 		$users = $Role->getMembers('loginname');
 
+		//Initialize issue subscription
+		$subscr = new IssueSubscription(array('login_id' => G::$S->Login->login_id));
+
 		if (isset($_POST['project_id']) && is_numeric($_POST['project_id'])
 			&& isset($_POST['label'])
 			&& isset($_POST['description'])
 			&& isset($_POST['priority']) && is_numeric($_POST['priority'])
 			&& isset($_POST['type'])
 			&& isset($_POST['handler_id']) && is_numeric($_POST['handler_id'])
+			&& isset($_POST['level'])
 		) {
 			unset($_POST['issue_id']);
 			$issue->setAll($_POST);
+
+			//Sets the user's issue subscription
+			$subscr->level = $_POST['level'];
 
 			if (0 == $issue->project_id) {
 				G::msg('You must select a project', 'error');
@@ -267,6 +322,20 @@ class BattyController extends Controller {
 				if ($id = $issue->insert()) {
 					G::msg('Issue saved with ID '.$id);
 
+					//Insert the new subscription
+					$subscr->issue_id = $issue->issue_id;
+					$subscr->lastSeen = NOW;
+					if ($subscr->insert() === false) {
+						G::msg('Failed to save subscription.', 'error');
+					}
+
+					//IF the assignee is different than the user who submitted the issue, subcribe the assignee
+					if ($issue->handler_id != G::$S->Login->login_id
+						&& false === IssueSubscription::subscribe($issue->handler_id, $issue->issue_id)
+					) {
+						G::msg('Failed to subscribe assignee.', 'error');
+					}
+
 					return $this->do_issue(array('report', $id));
 				} else {
 					G::msg('Failed to save issue.', 'error');
@@ -274,6 +343,7 @@ class BattyController extends Controller {
 			}
 		}
 
+		G::$V->subscr     = $subscr;
 		G::$V->users      = $users;
 		G::$V->types      = Issue::getTypes();
 		G::$V->issue      = $issue;
@@ -317,8 +387,12 @@ class BattyController extends Controller {
 				return $this->do_projects($argv);
 			}
 		} else {
-			$project = new Project(true);
+			return $this->do_projects($argv);
 		}
+
+		//Include batty.js in template
+		G::$V->_script('/^Batty/js/batty.js');
+
 		if (G::$S->roleTest(self::$role.'/Admin')
 			&& isset($_POST['label'])
 			&& isset($_POST['description'])
@@ -331,12 +405,10 @@ class BattyController extends Controller {
 			} else {
 				G::msg('Saving Project');
 				$ret = $project->save();
-				if (is_numeric($ret)) {
-					G::msg('Project saved with ID '.$ret);
+				if ($ret) {
+					G::msg('Project saved');
 				} elseif (null === $ret) {
 					G::msg('No changes detected.');
-				} elseif ($ret) {
-					G::msg('Project saved');
 				} else {
 					G::msg('Failed to save Project.', 'error');
 				}
@@ -344,9 +416,106 @@ class BattyController extends Controller {
 		}
 		require_once dirname(__DIR__).'/reports/IssueReport.php';
 
+		//Fetch the project subscription
+		$subscr = new ProjectSubscription(
+				array(
+					'login_id'   => G::$S->Login->login_id,
+					'project_id' => $project->project_id
+					)
+				);
+		$subscr->fill();
+
+		G::$V->subscr    = $subscr;
 		G::$V->byProject = IssueReport::byProject($project->project_id);
 		G::$V->project   = $project;
 		G::$V->_title    = 'Batty : Project';
 		G::$V->_template = 'Batty.Project.php';
+	}
+
+	/**
+	 * Add a new project
+	 *
+	 * @param array $argv Array of URL arguments
+	 *
+	 * @return void
+	 */
+	public function do_projectAdd($argv) {
+		if (!G::$S->roleTest('Batty/Admin')) {
+			return $this->do_403($argv);
+		}
+
+		//Initialize project
+		$project = new Project(true);
+
+		if (isset($_POST['label']) && isset($_POST['description'])) {
+			$project->label       = $_POST['label'];
+			$project->description = $_POST['description'];
+
+			if ('' == $project->label) {
+				G::msg('You must label this Project', 'error');
+			} else {
+				G::msg('Saving Project');
+				$ret = $project->insert();
+
+				if (is_numeric($ret)) {
+					G::msg('Project saved with ID '.$ret);
+
+					//Unset the post array so do_project does not try to save
+					unset($_POST);
+
+					//Send user to do_project
+					$argv[1] = $project->project_id;
+					return $this->do_project($argv);
+				} else {
+					G::msg('Failed to save Project.', 'error');
+				}
+			}
+		}
+		G::$V->project   = $project;
+		G::$V->_title    = 'Batty : Add A New Project';
+		G::$V->_template = 'Batty.ProjectAdd.php';
+	}
+
+	/**
+	 * Subscribes users to a Project/Issue
+	 *
+	 * @param array $argv Array of URL arguments
+	 *
+	 * @return void
+	 */
+	public function do_subscribe($argv) {
+		if (!G::$S->roleTest(self::$role)) {
+			die('0');
+		}
+		//Indicates whether the subscription worked
+		$worked = false;
+
+		if (isset($_POST['json'])) {
+			$json = json_decode($_POST['json'], true);
+
+			//Subscribes the user to a Project
+			if (isset($json['project_id'])) {
+				$worked = ProjectSubscription::subscribe(
+					G::$S->Login->login_id,
+					$json['project_id'],
+					false,
+					$json['level']
+				);
+			//Subscribes the user to an Issue
+			} elseif (isset($json['issue_id'])) {
+				$worked = IssueSubscription::subscribe(
+					G::$S->Login->login_id,
+					$json['issue_id'],
+					true,
+					$json['level']
+				);
+			}
+		}
+
+		//IF subscription was successful
+		if ($worked) {
+			die('1');
+		}
+		die('0');
 	}
 }

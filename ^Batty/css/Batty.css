@@ -39,6 +39,10 @@
 	width: 100px;
 }
 
+#Batty_ProjectSubscriber {
+	width: 950px;
+}
+
 .Batty_issueList {
 	width: 950px;
 	font-size: 10pt;
@@ -68,7 +72,7 @@ div#Batty_issueID a:hover {
 	text-decoration: underline;
 }
 
-div#Batty_issueID + div {
+div#Batty_Subscriber_Status + div {
 	margin-left: 150px;
 }
 
@@ -112,6 +116,7 @@ div.Batty_section h3 {
 #Batty_Report_label>:first-child {
 	display: inline-block;
 	width: 110px;
+	margin-top: 9px;
 }
 
 div.Batty_byLine {
@@ -142,4 +147,27 @@ span.js-charsRemaining {
 	font: bold 14pt Georgia, serif;
 	color: #ccc;
 	margin: -2px 4px;
+}
+
+#Batty_Ajax_Message {
+	font-size: 8pt;
+}
+
+.Batty_Issue_Select {
+	width: 135px;
+}
+
+.Batty_Subscriptions {
+	margin-left: 15px;
+}
+
+#Batty_Subscriber_Status {
+	width: 135px;
+	float: left;
+	clear: left;
+	margin: 0 8px;
+}
+
+.Batty_issue h3 {
+	margin-top: 9px;
 }

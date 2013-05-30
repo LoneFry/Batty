@@ -2,9 +2,9 @@
 <div class="Batty_Body">
 	<h2>Batty : Manage Projects</h2>
 
-	<div id="batty_nav">
+	<div id="Batty_nav">
 		<a href="/Batty/home">Home</a>
-		<a href="/Batty/project">Add a Project</a>
+		<a href="/Batty/projectAdd">Add a Project</a>
 	</div>
 
 	<div class="Batty_section">

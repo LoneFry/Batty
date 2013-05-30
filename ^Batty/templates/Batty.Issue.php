@@ -11,6 +11,20 @@
 <div id="Batty_issueID">
 	<a href="/Batty/issue/<?php html($issue->issue_id); ?>"><?php html($issue->num);?></a>
 </div>
+<div id="Batty_Subscriber_Status">
+	<label>Alert Me When:
+		<select name="level" class="Batty_Issue_Select" onclick="Batty_Ajax_Message.innerHTML = '';"
+				onchange="Batty_Subscribe({'issue_id':'<?php echo $issue->issue_id; ?>', 'level': this.value});">
+			<?php echo $subscr->level == '' ? '<option value="">-- Choose When --</option>' : ''; ?>
+			<option value="projectLevel"<?php echo $subscr->level == 'projectLevel'?' selected':''; ?>>[Use My Project Setting]</option>
+			<option value="none"<?php echo $subscr->level == 'none'?' selected':''; ?>>Never</option>
+			<option value="closed"<?php echo $subscr->level == 'closed'?' selected':''; ?>>Issue is closed</option>
+			<option value="statusChange"<?php echo $subscr->level == 'statusChange'?' selected':''; ?>>Status is changed</option>
+			<option value="allUpdates"<?php echo $subscr->level == 'allUpdates' && is_numeric($subscr->subscription_id)?' selected':''; ?>>Issue is updated</option>
+		</select>
+	</label>
+	<div id="Batty_Ajax_Message"></div>
+</div>
 
 <div class="Batty_section Batty_issue">
 	<h3><?php html($issue->label); ?></h3>
