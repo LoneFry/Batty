@@ -247,8 +247,15 @@ class BattyController extends Controller {
 							.'<b>Comment:</b>'
 							.'<pre style="white-space:pre-wrap;">'.htmlspecialchars($update->comment).'</pre>'
 							.'<b>Changes:</b>'
-							.'<pre style="white-space:pre-wrap;">'.print_r(array_map('htmlspecialchars', $update->changes), 1).'</pre>';
-						mail($to, $subject, $body, 'From: "Batty" <'.G::$G['siteEmail'].">\r\nContent-Type: text/html");
+							.'<pre style="white-space:pre-wrap;">'
+							.print_r(array_map('htmlspecialchars', $update->changes), 1).'</pre>'
+							;
+						$headers = 'From: "Batty" <'.G::$G['siteEmail'].">"
+							."\r\nReply-To: ".G::$G['siteEmail']
+							."\r\nReturn-Path: ".G::$G['siteEmail']
+							."\r\nContent-Type: text/html"
+							;
+						mail($to, $subject, $body, $headers, '-f'.G::$G['siteEmail']);
 					}
 				} else {
 					G::msg('Failed to save update.', 'error');
