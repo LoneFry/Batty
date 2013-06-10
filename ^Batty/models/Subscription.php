@@ -170,6 +170,34 @@ class IssueSubscription extends Subscription {
 	);
 
 	/**
+	 * Gets all subscriptions for a user
+	 *
+	 * @param int $login_id The user's login ID
+	 *
+	 * @return array
+	 */
+	public static function getSubscriptions($login_id) {
+		//Validate function parameters
+		if (!is_numeric($login_id)) {
+			return false;
+		}
+		$login_id = (int)$login_id;
+
+		//Array to be returned
+		$return = array();
+
+		//Searches for a user's subscriptions
+		$sub = new IssueSubscription(array('login_id' => $login_id));
+		$sub = $sub->search();
+
+		//Resets the array to use issue_id for the array key
+		foreach ($sub as $val) {
+			$return[$val->{self::$fkey}] = $val;
+		}
+		return $return;
+	}
+
+	/**
 	 * Creates IssueSubscription table
 	 *
 	 * @return void

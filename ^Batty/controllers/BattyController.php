@@ -60,10 +60,11 @@ class BattyController extends Controller {
 		G::$V->_template = 'Batty.Home.php';
 
 		require_once dirname(__DIR__).'/reports/IssueReport.php';
-		G::$V->byHandler    = IssueReport::byHandler(G::$S->Login->login_id, true);
-		G::$V->byReporter   = IssueReport::byReporter(G::$S->Login->login_id, true);
-		G::$V->openIssues   = IssueReport::byOpen();
-		G::$V->recentIssues = IssueReport::byRecent();
+		G::$V->byHandler     = IssueReport::byHandler(G::$S->Login->login_id, true);
+		G::$V->byReporter    = IssueReport::byReporter(G::$S->Login->login_id, true);
+		G::$V->openIssues    = IssueReport::byOpen();
+		G::$V->recentIssues  = IssueReport::byRecent();
+		G::$V->subscriptions = IssueSubscription::getSubscriptions(G::$S->Login->login_id);
 	}
 
 	/**
@@ -147,10 +148,24 @@ class BattyController extends Controller {
 		$subscr = new IssueSubscription(array('login_id' => G::$S->Login->login_id, 'issue_id' => $issue->issue_id));
 		$subscr->fill();
 
+		//IF an existing subscription exists
 		if (!is_null($subscr->subscription_id)) {
 			//Updates the lastSeen time
 			$subscr->lastSeen = NOW;
 			$subscr->save();
+		} else {
+			//Subscribe the user as "projectLevel" to the issue
+			$pk = IssueSubscription::subscribe(
+					G::$S->Login->login_id,
+					$issue->issue_id,
+					true,
+					'projectLevel'
+				);
+
+			//Fetch the newly created subscription
+			if ($pk) {
+				$subscr = IssueSubscription::byPK($pk);
+			}
 		}
 
 		if (isset($_POST['issue_id']) && is_numeric($_POST['issue_id']) && $_POST['issue_id'] == $issue->issue_id
@@ -196,6 +211,8 @@ class BattyController extends Controller {
 
 				if ($id = $update->insert()) {
 					G::msg('Update saved with ID '.$id);
+					$issue->recordChanged = NOW;
+
 					if ($result = $issue->update()) {
 						G::msg('Issue updated');
 

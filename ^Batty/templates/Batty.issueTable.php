@@ -23,8 +23,13 @@
 			<tbody>
 			<?php
 			foreach ($aIssues as $k => $issue) {
+				$class = isset($subscriptions[$issue['issue_id']])
+						&& $subscriptions[$issue['issue_id']]->lastSeen < $issue['recordChanged']
+					? ' class="Batty_new_update"'
+					: ''
+					;
 				?>
-				<tr>
+				<tr<?php echo $class;?>>
 					<td>
 						<a href="/Batty/issue/<?php html($issue['issue_id']); ?>"><?php html($issue['num']);?></a>
 					</td>
