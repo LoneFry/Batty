@@ -15,7 +15,6 @@
 	<label>Alert Me When:
 		<select name="level" class="Batty_Issue_Select" onclick="Batty_Ajax_Message.innerHTML = '';"
 				onchange="Batty_Subscribe({'issue_id':'<?php echo $issue->issue_id; ?>', 'level': this.value});">
-			<?php echo $subscr->level == '' ? '<option value="">-- Choose When --</option>' : ''; ?>
 			<option value="projectLevel"<?php echo $subscr->level == 'projectLevel'?' selected':''; ?>>[Use My Project Setting]</option>
 			<option value="none"<?php echo $subscr->level == 'none'?' selected':''; ?>>Never</option>
 			<option value="closed"<?php echo $subscr->level == 'closed'?' selected':''; ?>>Issue is closed</option>
