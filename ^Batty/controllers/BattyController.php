@@ -256,24 +256,10 @@ class BattyController extends Controller {
 						G::$S->Login->login_id
 					);
 
+					//IF we have subscribers, alert them to the update
 					if (is_array($emails) && count($emails)) {
-						$to      = implode(',', $emails);
-						$subject = 'Updated Batty #'.$issue->num.': '.$issue->label;
-						$body    = 'A new update has been submitted to an issue you subscribe to<br>'
-							.'<a href="http://'.$_SERVER['SERVER_NAME'].'/Batty/issue/'.$issue->issue_id.'">'
-							.'#'.$issue->issue_id.': '.$issue->label.'</a><br><br>'
-							.'<b>Comment:</b>'
-							.'<pre style="white-space:pre-wrap;">'.htmlspecialchars($update->comment).'</pre>'
-							.'<b>Changes:</b>'
-							.'<pre style="white-space:pre-wrap;">'
-							.print_r(array_map('htmlspecialchars', $update->changes), 1).'</pre>'
-							;
-						$headers = 'From: "Batty" <'.G::$G['siteEmail'].">"
-							."\r\nReply-To: ".G::$G['siteEmail']
-							."\r\nReturn-Path: ".G::$G['siteEmail']
-							."\r\nContent-Type: text/html"
-							;
-						mail($to, $subject, $body, $headers, '-f'.G::$G['siteEmail']);
+						//Emails the subscribers
+						$this->_alert_subscribers($emails, $issue, $update);
 					}
 				} else {
 					G::msg('Failed to save update.', 'error');
@@ -542,5 +528,39 @@ class BattyController extends Controller {
 			die('1');
 		}
 		die('0');
+	}
+
+	/**
+	 * Sends alert emails to issue subscribers
+	 *
+	 * @param object $issue  Issue object
+	 * @param object $update Update object
+	 *
+	 * @return void
+	 */
+	protected function _alert_subscribers($emails, $issue, $update) {
+		//Grab all of the logins
+		$logins = Login::search_ids(array(G::$S->Login->login_id, $issue->handler_id, $issue->reporter_id));
+
+		//Get the message body
+		ob_start();
+		include_once SITE.'/^Batty/templates/Batty._alert_subscribers.php';
+		$body = ob_get_clean();
+		ob_end_clean();
+
+		//Who to send the email to
+		$to      = implode(',', $emails);
+
+		//Email headers
+		$headers = 'From: "Batty" <'.G::$G['siteEmail'].">"
+			."\r\nReply-To: ".G::$G['siteEmail']
+			."\r\nReturn-Path: ".G::$G['siteEmail']
+			."\r\nContent-Type: text/html"
+			;
+
+		//Email subject
+		$subject = 'Updated Batty #'.$issue->num.': '.$issue->label;
+
+		mail($to, $subject, $body, $headers, '-f'.G::$G['siteEmail']);
 	}
 }
