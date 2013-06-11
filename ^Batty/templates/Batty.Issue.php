@@ -64,7 +64,7 @@
 			</tr>
 			<tr>
 				<td colspan="4">
-					<div class="Batty_issueComment"><?php html($issue->description);?></div>
+					<div class="Batty_issueComment"><?php batty_comment($issue->description); ?></div>
 				</td>
 			</tr>
 			</tbody>
@@ -88,7 +88,7 @@ if (isset($updates) && is_array($updates)) {
 						<td colspan="4">
 							<div class="Batty_issueComment"><?php
 								if ($update->comment) {
-									html($update->comment);
+									batty_comment($update->comment);
 								} else {
 									echo '<i>[No comment with this update.]</i>';
 								}?></div>

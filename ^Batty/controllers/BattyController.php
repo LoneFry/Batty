@@ -17,6 +17,7 @@ require_once dirname(__DIR__).'/models/Project.php';
 require_once dirname(__DIR__).'/models/Issue.php';
 require_once dirname(__DIR__).'/models/Update.php';
 require_once dirname(__DIR__).'/models/Subscription.php';
+require_once dirname(__DIR__).'/lib/functions.php';
 
 /**
  * Class BattyController
