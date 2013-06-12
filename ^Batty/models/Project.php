@@ -50,27 +50,24 @@ class Project extends Record {
 	/**
 	 * Create table in database
 	 *
-	 * @return void
+	 * @param bool $returnQuery If true, return query instead of running it
+	 *
+	 * @return mixed
 	 */
-	public static function create() {
+	public static function create($returnQuery = false) {
 		$query = "CREATE TABLE IF NOT EXISTS `".self::$table."` ("
 			." `project_id` TINYINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,"
 			." `label` VARCHAR(50) NOT NULL,"
 			." `description` MEDIUMTEXT NOT NULL,"
 			." `iCreateDate` INT UNSIGNED NOT NULL,"
 			." `recordChanged` TIMESTAMP NOT NULL"
-			." )";
-		G::$M->query($query);
-	}
+			." )"
+			;
+		if ($returnQuery) {
+			return $query;
+		}
 
-	/**
-	 * Drop table from database
-	 *
-	 * @return void
-	 */
-	public static function drop() {
-		$query = "DROP TABLE IF EXISTS `".self::$table."`";
-		G::$M->query($query);
+		return G::$M->query($query);
 	}
 }
 

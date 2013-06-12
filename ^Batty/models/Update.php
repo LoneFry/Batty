@@ -69,9 +69,11 @@ class Update extends Record {
 	/**
 	 * Create table in database
 	 *
-	 * @return void
+	 * @param bool $returnQuery If true, return query instead of running it
+	 *
+	 * @return mixed
 	 */
-	public static function create() {
+	public static function create($returnQuery = false) {
 		$query = "CREATE TABLE IF NOT EXISTS `".self::$table."` ("
 			." `update_id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,"
 			." `issue_id` INT UNSIGNED NOT NULL,"
@@ -81,18 +83,13 @@ class Update extends Record {
 			." `iCreateDate` INT UNSIGNED NOT NULL,"
 			." `recordChanged` TIMESTAMP NOT NULL,"
 			." KEY `issue_id` (`issue_id`)"
-			." )";
-		G::$M->query($query);
-	}
+			." )"
+			;
+		if ($returnQuery) {
+			return $query;
+		}
 
-	/**
-	 * Drop table from database
-	 *
-	 * @return void
-	 */
-	public static function drop() {
-		$query = "DROP TABLE IF EXISTS `".self::$table."`";
-		G::$M->query($query);
+		return G::$M->query($query);
 	}
 }
 

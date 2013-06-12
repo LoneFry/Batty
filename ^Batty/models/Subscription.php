@@ -132,16 +132,6 @@ abstract class Subscription extends Record {
 		}
 		return $emails;
 	}
-
-	/**
-	 * Drops table
-	 *
-	 * @return void
-	 */
-	public static function drop() {
-		$query = "DROP TABLE IF EXISTS `".static::$table."`";
-		G::$M->query($query);
-	}
 }
 
 /**
@@ -200,28 +190,34 @@ class IssueSubscription extends Subscription {
 	/**
 	 * Creates IssueSubscription table
 	 *
-	 * @return void
+	 * @param bool $returnQuery If true, return query instead of running it
+	 *
+	 * @return mixed
 	 */
-	public static function create() {
+	public static function create($returnQuery = false) {
 		$query = "CREATE TABLE IF NOT EXISTS `".self::$table."` ("
-				." `subscription_id` int(10) unsigned NOT NULL auto_increment,"
-				." `issue_id` int(10) unsigned NOT NULL,"
-				." `login_id` int(10) unsigned NOT NULL,"
-				." `level` enum('allUpdates','statusChange','closed','none','projectLevel') NOT NULL,"
-				." `lastSeen` datetime NOT NULL,"
-				." `recordChanged` timestamp NOT NULL default CURRENT_TIMESTAMP,"
-				." PRIMARY KEY  (`subscription_id`),"
-				." KEY `issue_id` (`issue_id`,`login_id`)"
-				.")"
-				;
-		G::$M->query($query);
+			." `subscription_id` int(10) unsigned NOT NULL auto_increment,"
+			." `issue_id` int(10) unsigned NOT NULL,"
+			." `login_id` int(10) unsigned NOT NULL,"
+			." `level` enum('allUpdates','statusChange','closed','none','projectLevel') NOT NULL,"
+			." `lastSeen` datetime NOT NULL,"
+			." `recordChanged` timestamp NOT NULL default CURRENT_TIMESTAMP,"
+			." PRIMARY KEY  (`subscription_id`),"
+			." KEY `issue_id` (`issue_id`,`login_id`)"
+			.")"
+			;
+		if ($returnQuery) {
+			return $query;
+		}
+
+		return G::$M->query($query);
 	}
 
 	/**
 	 * Gets the subscriptions for an issue
 	 *
-	 * @param type $issue_id
-	 * @param type $exclude
+	 * @param int $issue_id
+	 * @param int $exclude
 	 *
 	 * @return array
 	 */
@@ -281,27 +277,33 @@ class ProjectSubscription extends Subscription {
 	/**
 	 * Creates ProjectSubscription table
 	 *
-	 * @return void
+	 * @param bool $returnQuery If true, return query instead of running it
+	 *
+	 * @return mixed
 	 */
-	public static function create() {
+	public static function create($returnQuery = false) {
 		$query = "CREATE TABLE IF NOT EXISTS `".self::$table."` ("
-				." `subscription_id` int(10) unsigned NOT NULL auto_increment,"
-				." `project_id` int(10) unsigned NOT NULL,"
-				." `login_id` int(10) unsigned NOT NULL,"
-				." `level` enum('allUpdates','statusChange','closed','none') NOT NULL,"
-				." `recordChanged` timestamp NOT NULL default CURRENT_TIMESTAMP,"
-				." PRIMARY KEY  (`subscription_id`),"
-				." KEY `project_id` (`project_id`,`login_id`)"
-				.")"
-				;
-		G::$M->query($query);
+			." `subscription_id` int(10) unsigned NOT NULL auto_increment,"
+			." `project_id` int(10) unsigned NOT NULL,"
+			." `login_id` int(10) unsigned NOT NULL,"
+			." `level` enum('allUpdates','statusChange','closed','none') NOT NULL,"
+			." `recordChanged` timestamp NOT NULL default CURRENT_TIMESTAMP,"
+			." PRIMARY KEY  (`subscription_id`),"
+			." KEY `project_id` (`project_id`,`login_id`)"
+			.")"
+			;
+		if ($returnQuery) {
+			return $query;
+		}
+
+		return G::$M->query($query);
 	}
 
 	/**
 	 * Gets the subscriptions for a project
 	 *
-	 * @param type $issue_id
-	 * @param type $exclude
+	 * @param int $issue_id
+	 * @param int $exclude
 	 *
 	 * @return array
 	 */
