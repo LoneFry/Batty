@@ -5,8 +5,10 @@
 
 	<div id="Batty_nav">
 		<a href="/Batty/home">Home</a>
+		<a href="/Batty/users">Users</a>
 	</div>
 
+	<?php include 'Batty._getUserStats.php'; ?>
 	<div class="Batty_section Batty_issueList" id="Batty_byReporter">
 		<h3>Issues Reported By <?php html($loginname);?></h3>
 		<?php
@@ -29,7 +31,6 @@
 		include 'Batty.issueTable.php';
 		?>
 	</div>
-
 </div>
 
 <?php get_footer(); ?>

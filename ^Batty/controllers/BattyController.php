@@ -81,7 +81,8 @@ class BattyController extends Controller {
 		}
 		$Role = new Role(array('label' => 'Batty'));
 		$Role->fill();
-		G::$V->users = $Role->getMembers('loginname');
+		G::$V->users     = $Role->getMembers('loginname');
+		G::$V->userStats = Issue::getUserStats(array_keys(G::$V->users));
 
 		G::$V->_title    = 'Batty : Users';
 		G::$V->_template = 'Batty.Users.php';
@@ -119,6 +120,7 @@ class BattyController extends Controller {
 		require_once dirname(__DIR__).'/reports/IssueReport.php';
 		G::$V->byHandler  = IssueReport::byHandler($user_id);
 		G::$V->byReporter = IssueReport::byReporter($user_id);
+		G::$V->userStats  = Issue::getUserStats(array($user_id));
 	}
 
 	/**

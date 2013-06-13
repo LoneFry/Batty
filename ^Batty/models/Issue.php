@@ -167,6 +167,62 @@ class Issue extends Record {
 
 		return G::$M->query($query);
 	}
+
+	/**
+	 * Retrieves user feature request statistics
+	 *
+	 * @param array $aIDs Login_ids of the given users
+	 *
+	 * @return Array
+	 */
+	public static function getUserStats($aIDs) {
+		//Validate parameters
+		if (!is_array($aIDs) || !count($aIDs)) {
+			return false;
+		}
+		$a = array();
+		foreach ($aIDs as $k => $v) {
+			if (is_numeric($v)) {
+				$a[] = (int)$v;
+			}
+		}
+		//IF no IDs exist, return empty array
+		if (!count($a)) {
+			return array();
+		}
+		//List of IDs
+		$idList = implode(', ', $a);
+
+		//Gathers the statistics
+		$query = "SELECT l.`login_id`, l.`realname`,"
+				." SUM(IF(`type` = 'Feature' AND `status` != 'Abandoned', 1, 0)) as `featureCount`,"
+				." SUM(IF(`type` = 'Bug' AND `status` != 'Abandoned', 1, 0)) as `bugCount`,"
+				." SUM(IF(`status` = 'Abandoned', 1, 0)) as `abandonedCount`"
+				." FROM ".self::$table." i"
+				." RIGHT JOIN ".Login::getTable()." l ON l.`login_id` = i.`reporter_id`"
+				." WHERE l.`login_id` IN ($idList)"
+				." GROUP BY l.`login_id` ORDER BY l.`realname`"
+				;
+		if ((false === $result=G::$m->query($query))) {
+			return false;
+		}
+
+		//Constructs data array
+		$data = array();
+		while ($row = $result->fetch_assoc()) {
+			//Sets the login_id
+			$id = $row['login_id'];
+			//Sets null fields to 0
+			$data[$id]['featureCount']   = (int)$row['featureCount'];
+			$data[$id]['bugCount']       = (int)$row['bugCount'];
+			$data[$id]['abandonedCount'] = (int)$row['abandonedCount'];
+			//Calculates the total score
+			$data[$id]['totalScore'] =
+				$row['featureCount'] + (2 * $row['bugCount']) - $row['abandonedCount'];
+			$data[$id]['realname'] = $row['realname'];
+		}
+		return $data;
+	}
 }
 
 Issue::prime();
