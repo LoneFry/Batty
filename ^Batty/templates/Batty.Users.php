@@ -7,7 +7,8 @@
 		<a href="/Batty/home">Home</a>
 	</div>
 
-	<div class="Batty_section" id="Batty_byReporter">
+	<?php include 'Batty._getUserStats.php'; ?>
+	<div class="Batty_section Batty_issueList" id="Batty_byReporter">
 		<h3>Current Batty Users</h3>
 
 		<div class="Batty_tableWrapper">
