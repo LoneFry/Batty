@@ -4,6 +4,9 @@
 
 	<div id="Batty_nav">
 		<a href="/Batty/home">Home</a>
+		<a href="/Batty/projects">Projects</a>
+		<a href="/Batty/users">Users</a>
+		<a href="/Batty/report">Report an Issue</a>
 		<a href="/Batty/projectAdd">Add a Project</a>
 	</div>
 

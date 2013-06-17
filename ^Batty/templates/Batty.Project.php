@@ -5,6 +5,8 @@
 	<div id="Batty_nav">
 		<a href="/Batty/home">Home</a>
 		<a href="/Batty/projects">Projects</a>
+		<a href="/Batty/users">Users</a>
+		<a href="/Batty/report">Report an Issue</a>
 	</div>
 
 <?php if (G::$S->roleTest('Batty/Admin')) { ?>

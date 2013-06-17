@@ -5,6 +5,8 @@
 
 <div id="Batty_nav">
 	<a href="/Batty/home">Home</a>
+	<a href="/Batty/projects">Projects</a>
+	<a href="/Batty/users">Users</a>
 	<a href="/Batty/report">Report an Issue</a>
 </div>
 
@@ -41,7 +43,8 @@
 			<tbody>
 			<tr>
 				<td><?php if (isset($projects) && is_array($projects)) {
-						html($projects[$issue->project_id]->label);
+						echo '<a class="Batty_incognito" href="/Batty/project/'.$issue->project_id.'">'
+							.htmlspecialchars($projects[$issue->project_id]->label).'</a>';
 					} ?></td>
 				<td><?php html($issue->type); ?></td>
 				<td><?php if (isset($priorities) && is_array($priorities)) {
@@ -56,10 +59,11 @@
 				<th>Assigned Time</th>
 			</tr>
 			<tr>
-				<td><a href="/Batty/user/<?php html($issue->reporter_id); ?>"><?php html($reporter->loginname);?></a>
-				</td>
+				<td><a class="Batty_incognito" href="/Batty/user/<?php
+					html($issue->reporter_id); ?>"><?php html($reporter->loginname);?></a></td>
 				<td><?php echo !$issue->iCreateDate ? '' : date('Y-m-d H:i:s', $issue->iCreateDate);?></td>
-				<td><a href="/Batty/user/<?php html($issue->handler_id); ?>"><?php html($handler->loginname);?></a></td>
+				<td><a class="Batty_incognito" href="/Batty/user/<?php
+					html($issue->handler_id); ?>"><?php html($handler->loginname);?></a></td>
 				<td><?php echo !$issue->iAssignDate ? '' : date('Y-m-d H:i:s', $issue->iAssignDate);?></td>
 			</tr>
 			<tr>
@@ -219,7 +223,7 @@ if (isset($updates) && is_array($updates)) {
 				</tr>
 				<tr>
 					<td>
-						<a href="/Batty/user/<?php html($issue->reporter_id); ?>"><?php html($reporter->loginname);?></a>
+						<a class="Batty_incognito" href="/Batty/user/<?php html($issue->reporter_id); ?>"><?php html($reporter->loginname);?></a>
 					</td>
 					<td><?php echo !$issue->iCreateDate ? '' : date('Y-m-d H:i:s', $issue->iCreateDate);?></td>
 					<td>
