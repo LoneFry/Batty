@@ -16,7 +16,9 @@
 	// Prepare event handlers
 	var charsRemaining_show = function () {
 		// Trim the value for browsers that don't enforce maxLength
-		this.value = this.value.substr(0, this.maxLength);
+		if (this.value.length > this.maxLength) {
+			this.value = this.value.substr(0, this.maxLength);
+		}
 
 		// Update 'Characters Remaining' overlay
 		var o = this.nextSibling;
