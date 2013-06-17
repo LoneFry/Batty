@@ -10,7 +10,7 @@
 		<a href="/Batty/projectAdd">Add a Project</a>
 	</div>
 
-	<div class="Batty_section">
+	<div class="Batty_section Batty_issueList">
 		<h3>Existing Projects</h3>
 
 		<div class="Batty_tableWrapper">
