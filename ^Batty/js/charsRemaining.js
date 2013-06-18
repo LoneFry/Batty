@@ -10,6 +10,8 @@
  *  font: bold 14pt Georgia, serif;
  *  color: #ccc;
  *  margin: -2px 4px;
+ *  bottom: 4px;
+ *  right: 0;
  * }
  */
 (function () {
@@ -53,9 +55,6 @@
 		oSpan2.className = 'js-charsRemaining';
 		oSpan2.style.display = 'none';
 		oSpan2.style.position = 'absolute';
-		//oSpan2.style.textAlign = 'right';
-		oSpan2.style.top = 0;
-		oSpan2.style.right = 0;
 		oSpan.appendChild(oSpan2);
 
 		oInput.addEventListener('focus', charsRemaining_show);
