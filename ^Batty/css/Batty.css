@@ -17,6 +17,7 @@
 }
 
 .Batty_tableWrapper table td {
+	vertical-align: top;
 	border: 1px solid #ccc;
 	background-color: #fff;
 }
@@ -77,6 +78,8 @@ div#Batty_Subscriber_Status + div {
 }
 
 div.Batty_section h3 {
+	display: inline;
+	margin-right: 10px;
 	margin-bottom: 0;
 }
 
@@ -175,4 +178,40 @@ span.js-charsRemaining {
 }
 .Batty_new_update {
 	font-weight: bold;
+}
+.Batty_details summary:hover{
+	cursor: pointer;
+}
+.Batty_details summary {
+	display: inline;
+	padding-top: 10px;
+}
+.Batty_details {
+	margin-top: 18px;
+}
+.Batty_search ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.Batty_search ul li {
+	margin: 0px 0px 5px 0px;
+    padding: 0;
+}
+.Batty_search th {
+	text-align: center;
+}
+.Batty_searchContainer {
+	width: 950px;
+	font-size: 10pt;
+}
+.Batty_searchContainer .Batty_tableWrapper {
+	border-style: none;
+}
+#Batty_searchForm {
+	float: left;
+}
+#Batty_nav {
+	float: left;
+	width: 605px;
 }

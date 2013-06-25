@@ -3,13 +3,7 @@
 
 	<h2>Batty : Home</h2>
 
-	<div id="Batty_nav">
-		<a href="/Batty/home">Home</a>
-		<a href="/Batty/projects">Projects</a>
-		<a href="/Batty/users">Users</a>
-		<a href="/Batty/report">Report an Issue</a>
-	</div>
-
+	<?php include_once 'Batty.nav.php'; ?>
 	<div class="Batty_section Batty_issueList" id="Batty_byHandler">
 		<h3>Open Issues Assigned To You</h3>
 		<?php

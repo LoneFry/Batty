@@ -1,7 +1,7 @@
 <?php
 /**
  * Main Report for 'Batty' issue tracking system
- * File: /^Batty/reports/Issues.php
+ * File: /^Batty/reports/IssueReport.php
  *
  * PHP version 5.3
  *

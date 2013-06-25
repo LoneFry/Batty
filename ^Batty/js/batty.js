@@ -45,3 +45,53 @@ function Batty_Subscribe_() {
 		Batty_Ajax_Message.innerHTML = "Subscription failed.";
 	}
 }
+
+/**
+ * Checks/Unchecks a list of checkboxes by classname
+ *
+ * @param object checkBox The check "All" checkbox object
+ *
+ * @return void
+ */
+function checkAllClick(checkBox) {
+   //The class name of the checkboxes we will check/uncheck
+   var className     = checkBox.name.replace('_checkAll', '');
+
+   //Grabs every checkbox of the current class
+   var boxes = document.getElementsByClassName(className);
+
+   for (var i = 0; i < boxes.length; i++) {
+		boxes[i].checked = checkBox.checked;
+   }
+}
+
+/**
+ * Checks/Unchecks a the "All" checkbox
+ *
+ * @param object checkBox The checkbox updated
+ *
+ * @return void
+ */
+function updateCheckAll(checkBox) {
+   //Indicates whether we should check or uncheck the "All" checkbox
+   var checkFlag = true;
+
+   if (checkBox.checked) {
+	   //Grabs every checkbox of the current class
+	   var boxes = document.getElementsByClassName(checkBox.className);
+
+	   //Loops over every checkbox of the current class
+	   for (var i = 0; i < boxes.length; i++) {
+		   //"All" is checked, check box
+		   if (!boxes[i].checked) {
+			   checkFlag = false;
+			   break;
+		   }
+	   }
+   //Unchecks the "All" checkbox
+   } else {
+	   checkFlag = false;
+   }
+   //Checks/Unchecks the "All" checkbox
+   document.getElementsByName(checkBox.className + "_checkAll")[0].checked = checkFlag;
+}
