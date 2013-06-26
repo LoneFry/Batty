@@ -6,7 +6,6 @@
 }
 
 .Batty_tableWrapper table {
-	-border-collapse: collapse;
 	border-spacing: 0;
 	width: 100%;
 }
@@ -176,42 +175,72 @@ span.js-charsRemaining {
 .Batty_issue h3 {
 	margin-top: 9px;
 }
+
 .Batty_new_update {
 	font-weight: bold;
 }
-.Batty_details summary:hover{
+
+.Batty_details summary:hover {
 	cursor: pointer;
 }
+
 .Batty_details summary {
+	padding-top: 7px;
 	display: inline;
-	padding-top: 10px;
 }
+
 .Batty_details {
 	margin-top: 18px;
 }
+
 .Batty_search ul {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
 }
+
 .Batty_search ul li {
-	margin: 0px 0px 5px 0px;
-    padding: 0;
+	margin: 0 0 5px 0;
+	padding: 0;
 }
+
 .Batty_search th {
 	text-align: center;
 }
+
 .Batty_searchContainer {
 	width: 950px;
 	font-size: 10pt;
 }
+
 .Batty_searchContainer .Batty_tableWrapper {
 	border-style: none;
 }
+
 #Batty_searchForm {
 	float: left;
+	height: 24px;
+	position: relative;
+	width: 219px;
+	margin-right: 5px;
 }
+
+#Batty_searchForm > input {
+	position: absolute;
+	bottom: 0;
+}
+
+#Batty_searchForm > input.Batty_searchBox {
+	left: 0;
+	width: 150px;
+}
+
+#Batty_searchForm > input[type=submit] {
+	right: 0;
+	width: 60px;
+}
+
 #Batty_nav {
 	float: left;
-	width: 605px;
+	width: 600px;
 }
