@@ -3,13 +3,8 @@
 
 	<h2>Batty : Report Issue</h2>
 
-	<div id="Batty_nav">
-		<a href="/Batty/home">Home</a>
-		<a href="/Batty/projects">Projects</a>
-		<a href="/Batty/users">Users</a>
-		<a href="/Batty/report">Report an Issue</a>
-	</div>
 
+	<?php include_once 'Batty.nav.php'; ?>
 	<form method="POST" action="/Batty/report">
 		<div id="Batty_issueID">
 			<a href="/Batty/report">New</a>

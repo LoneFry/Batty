@@ -41,9 +41,33 @@ class BattyController extends Controller {
 	public function __construct($argv) {
 		parent::__construct($argv);
 
+		//Includes Batty's css
 		G::$V->_style('/^Batty/css/Batty.css');
+
+		//Makes HTML 5 <details> compatable for every browser
+		G::$V->_style('/^Batty/css/details-shim.min.css');
+		G::$V->_script('/^Batty/js/details-shim.min.js');
+
+		//Include batty.js in template
+		G::$V->_script('/^Batty/js/batty.js');
+
 		G::$V->priorities = G::$G['Batty']['priorities'];
-		G::$V->projects = Project::all();
+		G::$V->projects   = Project::all();
+		G::$V->types      = Issue::getTypes();
+		G::$V->statuses   = Issue::getStatuses();
+
+		//Get every user who can use Batty
+		$Role = new Role(array('label' => 'Batty'));
+		$Role->fill();
+		G::$V->users = $Role->getMembers('loginname');
+
+		//Initializes items which are used in Batty Search
+		G::$V->statusesUsed   = array();
+		G::$V->typesUsed      = array();
+		G::$V->prioritiesUsed = array();
+		G::$V->projectsUsed   = array();
+		G::$V->reportersUsed  = array();
+		G::$V->handlersUsed   = array();
 	}
 
 	/**
@@ -69,6 +93,65 @@ class BattyController extends Controller {
 	}
 
 	/**
+	 * Search through Batty Issues
+	 *
+	 * @param array $argv URL arguments
+	 *
+	 * @return void
+	 */
+	public function do_search($argv) {
+		//Validate user
+		if (!G::$S->roleTest(self::$role)) {
+			return $this->do_403($argv);
+		}
+
+		G::$V->_title    = 'Batty : Search';
+		G::$V->_template = 'Batty.Search.php';
+
+		//Retrieves search results
+		if (isset($_GET['search'])) {
+			require_once dirname(__DIR__).'/reports/SearchReport.php';
+
+			//Set search value
+			G::$V->search = trim($_GET['search']);
+
+			//Create new SearchReport
+			$Report = new SearchReport();
+
+			//Makes sure search has a value set
+			if (G::$V->search) {
+				$Report->search = G::$V->search;
+			}
+
+			//Loops over each optional field
+			$fields = array(
+				'priority'    => 'prioritiesUsed',
+				'status'      => 'statusesUsed',
+				'type'        => 'typesUsed',
+				'project_id'  => 'projectsUsed',
+				'reporter_id' => 'reportersUsed',
+				'handler_id'  => 'handlersUsed',
+				);
+			foreach ($fields as $fieldName => $valsUsed) {
+				if (!isset($_GET[$fieldName.'_checkAll']) && isset($_GET[$fieldName])) {
+					//Sets the field for the report
+					$Report->{$fieldName} = $_GET[$fieldName];
+
+					//Sets which items the user used in their search
+					G::$V->{$valsUsed}    = $_GET[$fieldName];
+
+					//IF this is set, the <details> will be displayed
+					G::$V->openFlag       = 1;
+				}
+			}
+
+			//Retrieves results
+			$Report->load();
+			G::$V->results = $Report->toArray();
+		}
+	}
+
+	/**
 	 * List Batty users
 	 *
 	 * @param array $argv command arguments vector
@@ -79,9 +162,6 @@ class BattyController extends Controller {
 		if (!G::$S->roleTest(self::$role)) {
 			return $this->do_403($argv);
 		}
-		$Role = new Role(array('label' => 'Batty'));
-		$Role->fill();
-		G::$V->users     = $Role->getMembers('loginname');
 		G::$V->userStats = Issue::getUserStats(array_keys(G::$V->users));
 
 		G::$V->_title    = 'Batty : Users';
@@ -102,17 +182,15 @@ class BattyController extends Controller {
 		if (!isset($argv[1]) || !is_numeric($argv[1])) {
 			return $this->do_users($argv);
 		}
-		$Role = new Role(array('label' => 'Batty'));
-		$Role->fill();
-		$users = $Role->getMembers('loginname');
-		if (!isset($users[$argv[1]])) {
+
+		if (!isset(G::$V->users[$argv[1]])) {
 			G::msg('Requested user not a current Batty user.', 'error');
 
 			return $this->do_users($argv);
 		}
 
 		G::$V->login_id  = $user_id = $argv[1];
-		G::$V->loginname = $users[$argv[1]];
+		G::$V->loginname = G::$V->users[$argv[1]];
 
 		G::$V->_title    = 'Batty : User';
 		G::$V->_template = 'Batty.User.php';
@@ -139,13 +217,7 @@ class BattyController extends Controller {
 			return $this->do_report($argv);
 		}
 
-		//Include batty.js in template
-		G::$V->_script('/^Batty/js/batty.js');
-
 		$issue = Issue::byPK($argv[1]);
-		$Role  = new Role(array('label' => 'Batty'));
-		$Role->fill();
-		$users = $Role->getMembers('loginname');
 
 		//Check to see if an existing subscription exists
 		$subscr = new IssueSubscription(array('login_id' => G::$S->Login->login_id, 'issue_id' => $issue->issue_id));
@@ -205,7 +277,7 @@ class BattyController extends Controller {
 				G::msg('You must set a priority', 'error');
 			} elseif (!in_array($_POST['type'], Issue::getTypes())) {
 				G::msg('You must select a type', 'error');
-			} elseif (0 < $_POST['handler_id'] && !in_array($_POST['handler_id'], array_keys($users))) {
+			} elseif (0 < $_POST['handler_id'] && !in_array($_POST['handler_id'], array_keys(G::$V->users))) {
 				G::msg('Unknown handler selected', 'error');
 			} elseif (!$update->comment && !$diff) {
 				G::msg('No comment or changes detected.');
@@ -270,12 +342,9 @@ class BattyController extends Controller {
 		}
 
 		G::$V->subscr     = $subscr;
-		G::$V->users      = $users;
 		G::$V->issue      = $issue;
 		G::$V->reporter   = !G::$V->issue->reporter_id ? new Login() : Login::byPK(G::$V->issue->reporter_id);
 		G::$V->handler    = !G::$V->issue->handler_id ? new Login() : Login::byPK(G::$V->issue->handler_id);
-		G::$V->types      = Issue::getTypes();
-		G::$V->statuses   = Issue::getStatuses();
 		G::$V->updates    = Update::byIssue(G::$V->issue->issue_id);
 		G::$V->_title     = 'Batty : Issue';
 		G::$V->_template  = 'Batty.Issue.php';
@@ -294,10 +363,6 @@ class BattyController extends Controller {
 		}
 
 		$issue = new Issue(true);
-
-		$Role = new Role(array('label' => 'Batty'));
-		$Role->fill();
-		$users = $Role->getMembers('loginname');
 
 		//Initialize issue subscription
 		$subscr = new IssueSubscription(array('login_id' => G::$S->Login->login_id));
@@ -324,7 +389,7 @@ class BattyController extends Controller {
 				G::msg('You must set a priority', 'error');
 			} elseif (!in_array($_POST['type'], Issue::getTypes())) {
 				G::msg('You must select a type', 'error');
-			} elseif (0 < $_POST['handler_id'] && !in_array($_POST['handler_id'], array_keys($users))) {
+			} elseif (0 < $_POST['handler_id'] && !in_array($_POST['handler_id'], array_keys(G::$V->users))) {
 				G::msg('Unknown handler selected', 'error');
 			} else {
 				G::msg('Saving Issue');
@@ -357,8 +422,6 @@ class BattyController extends Controller {
 		}
 
 		G::$V->subscr     = $subscr;
-		G::$V->users      = $users;
-		G::$V->types      = Issue::getTypes();
 		G::$V->issue      = $issue;
 		G::$V->_title     = 'Batty : Report Issue';
 		G::$V->_template  = 'Batty.Report.php';
@@ -402,9 +465,6 @@ class BattyController extends Controller {
 		} else {
 			return $this->do_projects($argv);
 		}
-
-		//Include batty.js in template
-		G::$V->_script('/^Batty/js/batty.js');
 
 		if (G::$S->roleTest(self::$role.'/Admin')
 			&& isset($_POST['label'])
