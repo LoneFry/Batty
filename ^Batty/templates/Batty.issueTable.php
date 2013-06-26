@@ -51,7 +51,7 @@
 					<td title="<?php html($priorities[$issue['priority']]); ?>"><?php html($issue['priority']);?></td>
 					<td title="<?php echo date('Y-m-d H:i:s', strtotime($issue['recordChanged'])); ?>"><?php
 						echo str_replace(' ', '&nbsp;', date('Y-m-d H:i', strtotime($issue['recordChanged'])));?></td>
-					<td><?php html($issue['label']);?></td>
+					<td><a class="Batty_issueLink" href="/Batty/issue/<?php html($issue['issue_id']); ?>"><?php html($issue['label']);?></a></td>
 				</tr>
 			<?php
 			}

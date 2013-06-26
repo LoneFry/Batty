@@ -140,6 +140,7 @@ div.Batty_section + hr {
 
 div#footer { margin-top: 200px; }
 
+.Batty_tableWrapper table tr:not(:hover) a.Batty_issueLink,
 a.Batty_incognito:not(:hover) {
 	text-decoration: none;
 	color: inherit;
