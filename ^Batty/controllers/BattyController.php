@@ -407,11 +407,27 @@ class BattyController extends Controller {
 						G::msg('Failed to save subscription.', 'error');
 					}
 
-					//IF the assignee is different than the user who submitted the issue, subcribe the assignee
+					//IF the assignee is different than the user who submitted the issue, subscribe the assignee
 					if ($issue->handler_id != G::$S->Login->login_id
 						&& false === IssueSubscription::subscribe($issue->handler_id, $issue->issue_id)
 					) {
 						G::msg('Failed to subscribe assignee.', 'error');
+
+					}
+
+					//Grabs the subscriber's emails
+					$emails = Subscription::getSubscriberEmails(
+						'opened',
+						$issue->issue_id,
+						$issue->project_id,
+						G::$S->Login->login_id
+					);
+
+					//IF we have subscribers, alert them to the update
+					if (is_array($emails) && count($emails)) {
+						//Emails the subscribers
+						$update = new Update(array('comment' => $issue->description));
+						$this->_alert_subscribers($emails, $issue, $update);
 					}
 
 					return $this->do_issue(array('report', $id));
