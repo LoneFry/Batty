@@ -79,7 +79,7 @@
 								<td>
 									<ul>
 										<?php
-										foreach($users as $login_id => $loginname) {
+										foreach($users as $login_id => $loginnam) {
 											if (in_array($login_id, $handlersUsed)) {
 												$checked = ' checked="checked"';
 											} else {
@@ -89,7 +89,7 @@
 										<li>
 											<label>
 												<input type="checkbox" name="handler_id[]" class="handler_id" onchange="updateCheckAll(this);" value="<?php echo $login_id; ?>"<?php echo $checked; ?> />
-												<?php echo $loginname; ?>
+												<?php echo $loginnam; ?>
 											</label>
 										</li>
 									<?php } ?>
@@ -98,7 +98,7 @@
 								<td>
 									<ul>
 										<?php
-										foreach($users as $login_id => $loginname) {
+										foreach($users as $login_id => $loginnam) {
 											if (in_array($login_id, $reportersUsed)) {
 												$checked = ' checked="checked"';
 											} else {
@@ -108,7 +108,7 @@
 										<li>
 											<label>
 												<input type="checkbox" name="reporter_id[]" class="reporter_id" onchange="updateCheckAll(this);" value="<?php echo $login_id; ?>"<?php echo $checked; ?> />
-												<?php echo $loginname; ?>
+												<?php echo $loginnam; ?>
 											</label>
 										</li>
 									<?php } ?>
