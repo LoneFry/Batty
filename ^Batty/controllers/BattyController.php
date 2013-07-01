@@ -44,9 +44,13 @@ class BattyController extends Controller {
 		//Includes Batty's css
 		G::$V->_style('/^Batty/css/Batty.css');
 
-		//Makes HTML 5 <details> compatable for every browser
+		//Makes HTML 5 <details> compatible for every browser
 		G::$V->_style('/^Batty/css/details-shim.min.css');
 		G::$V->_script('/^Batty/js/details-shim.min.js');
+
+		//Add table sorting!
+		G::$V->_style('/^Batty/css/sort-table.min.css');
+		G::$V->_script('/^Batty/js/sort-table.min.js');
 
 		//Include batty.js in template
 		G::$V->_script('/^Batty/js/batty.js');
