@@ -52,6 +52,10 @@ class BattyController extends Controller {
 		G::$V->_style('/^Batty/css/sort-table.min.css');
 		G::$V->_script('/^Batty/js/sort-table.min.js');
 
+		//Add charsRemaining input overlays!
+		G::$V->_style('/^Batty/css/charsRemaining.min.css');
+		G::$V->_script('/^Batty/js/charsRemaining.min.js');
+
 		//Include batty.js in template
 		G::$V->_script('/^Batty/js/batty.js');
 

@@ -23,5 +23,4 @@
 		</div>
 	</div>
 </div>
-<script type="text/javascript" src="/^Batty/js/charsRemaining.js"></script>
 <?php get_footer(); ?>

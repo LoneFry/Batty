@@ -146,14 +146,6 @@ a.Batty_incognito:not(:hover) {
 	color: inherit;
 }
 
-span.js-charsRemaining {
-	font: bold 14pt Georgia, serif;
-	color: #ccc;
-	margin: -2px 4px;
-	bottom: 4px;
-	right: 0;
-}
-
 #Batty_Ajax_Message {
 	font-size: 8pt;
 }
