@@ -12,8 +12,8 @@
  * @link     http://github.com/LoneFry/Batty
  */
 
-require_once LIB.'/Record.php';
-require_once SITE.CORE.'/models/Login.php';
+require_once SITE.'/^/lib/Record.php';
+require_once SITE.'/^/models/Login.php';
 
 /**
  * Subscription - notification relationship between a user and issue/project

@@ -12,7 +12,7 @@
  * @link     http://github.com/LoneFry/Batty
  */
 
-require_once LIB.'/Record.php';
+require_once SITE.'/^/lib/Record.php';
 
 /**
  * Class Issue

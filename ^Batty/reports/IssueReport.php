@@ -12,9 +12,9 @@
  * @link     http://github.com/LoneFry/Batty
  */
 
-require_once LIB.'/Report.php';
+require_once SITE.'/^/lib/Report.php';
 require_once dirname(__DIR__).'/models/Issue.php';
-require_once SITE.CORE.'/models/Login.php';
+require_once SITE.'/^/models/Login.php';
 
 /**
  * Class IssueReport

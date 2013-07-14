@@ -12,7 +12,7 @@
  * @link     http://github.com/LoneFry/Batty
  */
 
-require_once SITE.CORE.'/models/Role.php';
+require_once SITE.'/^/models/Role.php';
 require_once dirname(__DIR__).'/models/Project.php';
 require_once dirname(__DIR__).'/models/Issue.php';
 require_once dirname(__DIR__).'/models/Update.php';
