@@ -6,10 +6,10 @@
 	<?php
 	} else {
 		?>
-		<table>
+		<table class="js-sort-table">
 			<thead>
 			<tr>
-				<th>Id</th>
+				<th class="js-sort-number">Id</th>
 				<th>Reporter</th>
 				<th>Handler</th>
 				<th>Project</th>
