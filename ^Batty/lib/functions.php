@@ -31,7 +31,7 @@ function batty_comment($comment) {
 
 	//Convert URLs into links
 	$comment = preg_replace(
-		'@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-()]*(\?\S+)?[^\.\s])?)?)@',
+		'@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_#-.]*(\?\S+)?[^\.\s])?)?)@',
 		'<a href="$1">$1</a>',
 		$comment
 		);
