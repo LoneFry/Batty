@@ -312,7 +312,7 @@ class BattyController extends Controller {
 					}
 
 					//IF current user not already subscribed, subscribe
-					if (is_null($subscr->subscription_id)) {
+					if ('allUpdates' != $subscr->level) {
 						$subscr->level = 'allUpdates';
 						$subscr->lastSeen = NOW;
 						$subscr->save();
