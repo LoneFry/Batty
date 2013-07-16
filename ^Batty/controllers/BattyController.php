@@ -41,22 +41,22 @@ class BattyController extends Controller {
     public function __construct($argv) {
         parent::__construct($argv);
 
-        //Includes Batty's css
+        // Includes Batty's css
         G::$V->_style('/^Batty/css/Batty.css');
 
-        //Makes HTML 5 <details> compatible for every browser
+        // Makes HTML 5 <details> compatible for every browser
         G::$V->_style('/^Batty/css/details-shim.min.css');
         G::$V->_script('/^Batty/js/details-shim.min.js');
 
-        //Add table sorting!
+        // Add table sorting!
         G::$V->_style('/^Batty/css/sort-table.min.css');
         G::$V->_script('/^Batty/js/sort-table.min.js');
 
-        //Add charsRemaining input overlays!
+        // Add charsRemaining input overlays!
         G::$V->_style('/^Batty/css/charsRemaining.min.css');
         G::$V->_script('/^Batty/js/charsRemaining.min.js');
 
-        //Include batty.js in template
+        // Include batty.js in template
         G::$V->_script('/^Batty/js/batty.js');
 
         G::$V->priorities = G::$G['Batty']['priorities'];
@@ -64,12 +64,12 @@ class BattyController extends Controller {
         G::$V->types      = Issue::getTypes();
         G::$V->statuses   = Issue::getStatuses();
 
-        //Get every user who can use Batty
+        // Get every user who can use Batty
         $Role = new Role(array('label' => 'Batty'));
         $Role->fill();
         G::$V->users = $Role->getMembers('loginname');
 
-        //Initializes items which are used in Batty Search
+        // Initializes items which are used in Batty Search
         G::$V->statusesUsed   = array();
         G::$V->typesUsed      = array();
         G::$V->prioritiesUsed = array();
@@ -108,7 +108,7 @@ class BattyController extends Controller {
      * @return void
      */
     public function do_search($argv) {
-        //Validate user
+        // Validate user
         if (!G::$S->roleTest(self::$role)) {
             return $this->do_403($argv);
         }
@@ -116,22 +116,22 @@ class BattyController extends Controller {
         G::$V->_title    = 'Batty : Search';
         G::$V->_template = 'Batty.Search.php';
 
-        //Retrieves search results
+        // Retrieves search results
         if (isset($_GET['search'])) {
             require_once dirname(__DIR__).'/reports/SearchReport.php';
 
-            //Set search value
+            // Set search value
             G::$V->search = trim($_GET['search']);
 
-            //Create new SearchReport
+            // Create new SearchReport
             $Report = new SearchReport();
 
-            //Makes sure search has a value set
+            // Makes sure search has a value set
             if (G::$V->search) {
                 $Report->search = G::$V->search;
             }
 
-            //Loops over each optional field
+            // Loops over each optional field
             $fields = array(
                 'priority'    => 'prioritiesUsed',
                 'status'      => 'statusesUsed',
@@ -142,18 +142,18 @@ class BattyController extends Controller {
                 );
             foreach ($fields as $fieldName => $valsUsed) {
                 if (!isset($_GET[$fieldName.'_checkAll']) && isset($_GET[$fieldName])) {
-                    //Sets the field for the report
+                    // Sets the field for the report
                     $Report->{$fieldName} = $_GET[$fieldName];
 
-                    //Sets which items the user used in their search
+                    // Sets which items the user used in their search
                     G::$V->{$valsUsed}    = $_GET[$fieldName];
 
-                    //IF this is set, the <details> will be displayed
+                    // IF this is set, the <details> will be displayed
                     G::$V->openFlag       = 1;
                 }
             }
 
-            //Retrieves results
+            // Retrieves results
             $Report->load();
             G::$V->results = $Report->toArray();
         }
@@ -227,17 +227,17 @@ class BattyController extends Controller {
 
         $issue = Issue::byPK($argv[1]);
 
-        //Check to see if an existing subscription exists
+        // Check to see if an existing subscription exists
         $subscr = new IssueSubscription(array('login_id' => G::$S->Login->login_id, 'issue_id' => $issue->issue_id));
         $subscr->fill();
 
-        //IF an existing subscription exists
+        // IF an existing subscription exists
         if (!is_null($subscr->subscription_id)) {
-            //Updates the lastSeen time
+            // Updates the lastSeen time
             $subscr->lastSeen = NOW;
             $subscr->save();
         } else {
-            //Subscribe the user as "projectLevel" to the issue
+            // Subscribe the user as "projectLevel" to the issue
             $pk = IssueSubscription::subscribe(
                     G::$S->Login->login_id,
                     $issue->issue_id,
@@ -245,7 +245,7 @@ class BattyController extends Controller {
                     'projectLevel'
                 );
 
-            //Fetch the newly created subscription
+            // Fetch the newly created subscription
             if ($pk) {
                 $subscr = IssueSubscription::byPK($pk);
             }
@@ -299,7 +299,7 @@ class BattyController extends Controller {
                     if ($result = $issue->update()) {
                         G::msg('Issue updated');
 
-                        //IF handler changed, change subscription
+                        // IF handler changed, change subscription
                         if (isset($diff['handler_id'])
                             && false === IssueSubscription::subscribe($issue->handler_id, $issue->issue_id)
                         ) {
@@ -311,7 +311,7 @@ class BattyController extends Controller {
                         G::msg('Failed to update issue.', 'error');
                     }
 
-                    //IF current user not already subscribed, subscribe
+                    // IF current user not already subscribed, subscribe
                     if ('allUpdates' != $subscr->level) {
                         $subscr->level = 'allUpdates';
                         $subscr->lastSeen = NOW;
@@ -319,18 +319,18 @@ class BattyController extends Controller {
                         G::msg('You have been subscribed to all updates for this issue.');
                     }
 
-                    //IF the issue was closed
+                    // IF the issue was closed
                     if ($issue->iClosedDate > NOW - 2) {
                         $change = 'closed';
-                    //IF the status was changed
+                    // IF the status was changed
                     } elseif (isset($diff['status'])) {
                         $change = 'status';
-                    //ELSE any other change
+                    // ELSE any other change
                     } else {
                         $change = 'other';
                     }
 
-                    //Grabs the subscriber's emails
+                    // Grabs the subscriber's emails
                     $emails = Subscription::getSubscriberEmails(
                         $change,
                         $issue->issue_id,
@@ -338,9 +338,9 @@ class BattyController extends Controller {
                         G::$S->Login->login_id
                     );
 
-                    //IF we have subscribers, alert them to the update
+                    // IF we have subscribers, alert them to the update
                     if (is_array($emails) && count($emails)) {
-                        //Emails the subscribers
+                        // Emails the subscribers
                         $this->_alert_subscribers($emails, $issue, $update);
                     }
                 } else {
@@ -372,7 +372,7 @@ class BattyController extends Controller {
 
         $issue = new Issue(true);
 
-        //Initialize issue subscription
+        // Initialize issue subscription
         $subscr = new IssueSubscription(array('login_id' => G::$S->Login->login_id));
 
         if (isset($_POST['project_id']) && is_numeric($_POST['project_id'])
@@ -386,7 +386,7 @@ class BattyController extends Controller {
             unset($_POST['issue_id']);
             $issue->setAll($_POST);
 
-            //Sets the user's issue subscription
+            // Sets the user's issue subscription
             $subscr->level = $_POST['level'];
 
             if (0 == $issue->project_id) {
@@ -408,14 +408,14 @@ class BattyController extends Controller {
                 if ($id = $issue->insert()) {
                     G::msg('Issue saved with ID '.$id);
 
-                    //Insert the new subscription
+                    // Insert the new subscription
                     $subscr->issue_id = $issue->issue_id;
                     $subscr->lastSeen = NOW;
                     if ($subscr->insert() === false) {
                         G::msg('Failed to save subscription.', 'error');
                     }
 
-                    //IF the assignee is different than the user who submitted the issue, subscribe the assignee
+                    // IF the assignee is different than the user who submitted the issue, subscribe the assignee
                     if ($issue->handler_id != G::$S->Login->login_id
                         && false === IssueSubscription::subscribe($issue->handler_id, $issue->issue_id)
                     ) {
@@ -423,7 +423,7 @@ class BattyController extends Controller {
 
                     }
 
-                    //Grabs the subscriber's emails
+                    // Grabs the subscriber's emails
                     $emails = Subscription::getSubscriberEmails(
                         'opened',
                         $issue->issue_id,
@@ -431,9 +431,9 @@ class BattyController extends Controller {
                         G::$S->Login->login_id
                     );
 
-                    //IF we have subscribers, alert them to the update
+                    // IF we have subscribers, alert them to the update
                     if (is_array($emails) && count($emails)) {
-                        //Emails the subscribers
+                        // Emails the subscribers
                         $update = new Update(array('comment' => $issue->description));
                         $this->_alert_subscribers($emails, $issue, $update);
                     }
@@ -513,7 +513,7 @@ class BattyController extends Controller {
         }
         require_once dirname(__DIR__).'/reports/IssueReport.php';
 
-        //Fetch the project subscription
+        // Fetch the project subscription
         $subscr = new ProjectSubscription(
                 array(
                     'login_id'   => G::$S->Login->login_id,
@@ -541,7 +541,7 @@ class BattyController extends Controller {
             return $this->do_403($argv);
         }
 
-        //Initialize project
+        // Initialize project
         $project = new Project(true);
 
         if (isset($_POST['label']) && isset($_POST['description'])) {
@@ -557,10 +557,10 @@ class BattyController extends Controller {
                 if (is_numeric($ret)) {
                     G::msg('Project saved with ID '.$ret);
 
-                    //Unset the post array so do_project does not try to save
+                    // Unset the post array so do_project does not try to save
                     unset($_POST);
 
-                    //Send user to do_project
+                    // Send user to do_project
                     $argv[1] = $project->project_id;
                     return $this->do_project($argv);
                 } else {
@@ -584,13 +584,13 @@ class BattyController extends Controller {
         if (!G::$S->roleTest(self::$role)) {
             die('0');
         }
-        //Indicates whether the subscription worked
+        // Indicates whether the subscription worked
         $worked = false;
 
         if (isset($_POST['json'])) {
             $json = json_decode($_POST['json'], true);
 
-            //Subscribes the user to a Project
+            // Subscribes the user to a Project
             if (isset($json['project_id'])) {
                 $worked = ProjectSubscription::subscribe(
                     G::$S->Login->login_id,
@@ -598,7 +598,7 @@ class BattyController extends Controller {
                     false,
                     $json['level']
                 );
-            //Subscribes the user to an Issue
+            // Subscribes the user to an Issue
             } elseif (isset($json['issue_id'])) {
                 $worked = IssueSubscription::subscribe(
                     G::$S->Login->login_id,
@@ -609,7 +609,7 @@ class BattyController extends Controller {
             }
         }
 
-        //IF subscription was successful
+        // IF subscription was successful
         if ($worked) {
             die('1');
         }
@@ -625,26 +625,26 @@ class BattyController extends Controller {
      * @return void
      */
     protected function _alert_subscribers($emails, $issue, $update) {
-        //Grab all of the logins
+        // Grab all of the logins
         $logins = Login::search_ids(array(G::$S->Login->login_id, $issue->handler_id, $issue->reporter_id));
 
-        //Get the message body
+        // Get the message body
         ob_start();
         include_once SITE.'/^Batty/templates/Batty._alert_subscribers.php';
         $body = ob_get_clean();
         ob_end_clean();
 
-        //Who to send the email to
+        // Who to send the email to
         $to      = implode(',', $emails);
 
-        //Email headers
+        // Email headers
         $headers = 'From: "Batty" <'.G::$G['siteEmail'].">"
             ."\r\nReply-To: ".G::$G['siteEmail']
             ."\r\nReturn-Path: ".G::$G['siteEmail']
             ."\r\nContent-Type: text/html"
             ;
 
-        //Email subject
+        // Email subject
         $subject = 'Updated Batty #'.$issue->num.': '.$issue->label;
 
         mail($to, $subject, $body, $headers, '-f'.G::$G['siteEmail']);

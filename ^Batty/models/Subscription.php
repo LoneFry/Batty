@@ -38,7 +38,7 @@ abstract class Subscription extends Record {
      * @return boolean
      */
     public static function subscribe($login_id, $task_id, $lastSeen = false, $level = 'allUpdates') {
-        //Validate parameters
+        // Validate parameters
         if (!is_numeric($task_id) || !is_numeric($login_id)
             || !in_array($level, static::$vars['level']['values'])
         ) {
@@ -48,17 +48,17 @@ abstract class Subscription extends Record {
         $login_id = (int)$login_id;
         $lastSeen = $lastSeen?NOW:0;
 
-        //Create a new subscription object
+        // Create a new subscription object
         $subscr = new static(array('login_id' => $login_id, static::$fkey => $task_id));
 
-        //IF an existing subscription DOES NOT exist, INSERT
+        // IF an existing subscription DOES NOT exist, INSERT
         if (false === $subscr->fill()) {
             $subscr->level    = $level;
             if ($lastSeen) {
                 $subscr->lastSeen = $lastSeen;
             }
             return $subscr->insert();
-        //IF an existing subscription exists, UPDATE
+        // IF an existing subscription exists, UPDATE
         } else {
             $subscr->level    = $level;
             if ($lastSeen) {
@@ -79,7 +79,7 @@ abstract class Subscription extends Record {
      * @return array list of email addresses
      */
     public static function getSubscriberEmails($change, $issue_id, $project_id, $exclude = 0) {
-        //Validate parameters
+        // Validate parameters
         if (!is_numeric($issue_id) || !is_numeric($exclude) || !is_numeric($project_id)) {
             return false;
         }
@@ -87,45 +87,45 @@ abstract class Subscription extends Record {
         $exclude    = (int)$exclude;
         $project_id = (int)$project_id;
 
-        //Gets the issue subscriptions
+        // Gets the issue subscriptions
         $iSubscriptions = IssueSubscription::getIssueSubscriptions($issue_id, $exclude);
 
-        //Gets the project subscriptions
+        // Gets the project subscriptions
         $pSubscriptions = ProjectSubscription::getProjectSubscriptions($project_id, $exclude);
 
-        //Emails to be returned
+        // Emails to be returned
         $emails  = array();
 
-        //Loop through the issue subscriptions
+        // Loop through the issue subscriptions
         foreach ($iSubscriptions as $login_id => $subsr) {
-            //IF level is 'projectLevel', skip
+            // IF level is 'projectLevel', skip
             if ($subsr['level'] == 'projectLevel') {
                 continue;
             }
 
-            //IF user is subscribed to all updates
+            // IF user is subscribed to all updates
             if ($subsr['level'] == 'allUpdates') {
                 $emails[] = $subsr['email'];
-            //ELSEIF status change
+            // ELSEIF status change
             } elseif (($change == 'status' || $change == 'closed') && $subsr['level'] == 'statusChange') {
                 $emails[] = $subsr['email'];
-            //ELSEIF issue was closed
+            // ELSEIF issue was closed
             } elseif ($change == 'closed' && $subsr['level'] == 'closed') {
                 $emails[] = $subsr['email'];
             }
 
-            //IF login_id has a project subscription, unset it
+            // IF login_id has a project subscription, unset it
             unset($pSubscriptions[$login_id]);
         }
 
-        //Loop through the project subscriptions (if any are left)
+        // Loop through the project subscriptions (if any are left)
         foreach ($pSubscriptions as $subsr) {
             if ($subsr['level'] == 'allUpdates') {
                 $emails[] = $subsr['email'];
-            //ELSEIF status change
+            // ELSEIF status change
             } elseif ($change == 'status' && $subsr['level'] == 'statusChange') {
                 $emails[] = $subsr['email'];
-            //ELSEIF issue was closed
+            // ELSEIF issue was closed
             } elseif ($change == 'closed' && $subsr['level'] == 'closed') {
                 $emails[] = $subsr['email'];
             }
@@ -167,20 +167,20 @@ class IssueSubscription extends Subscription {
      * @return array
      */
     public static function getSubscriptions($login_id) {
-        //Validate function parameters
+        // Validate function parameters
         if (!is_numeric($login_id)) {
             return false;
         }
         $login_id = (int)$login_id;
 
-        //Array to be returned
+        // Array to be returned
         $return = array();
 
-        //Searches for a user's subscriptions
+        // Searches for a user's subscriptions
         $sub = new IssueSubscription(array('login_id' => $login_id));
         $sub = $sub->search();
 
-        //Resets the array to use issue_id for the array key
+        // Resets the array to use issue_id for the array key
         foreach ($sub as $val) {
             $return[$val->{self::$fkey}] = $val;
         }
@@ -222,7 +222,7 @@ class IssueSubscription extends Subscription {
      * @return array
      */
     public static function getIssueSubscriptions($issue_id, $exclude) {
-        //Validate parameters
+        // Validate parameters
         if (!is_numeric($issue_id) || !is_numeric($exclude)) {
             return false;
         }
@@ -239,7 +239,7 @@ class IssueSubscription extends Subscription {
             return false;
         }
 
-        //Array to be returned
+        // Array to be returned
         $data = array();
 
         while ($row = $result->fetch_assoc()) {
@@ -308,7 +308,7 @@ class ProjectSubscription extends Subscription {
      * @return array
      */
     public static function getProjectSubscriptions($project_id, $exclude) {
-        //Validate parameters
+        // Validate parameters
         if (!is_numeric($project_id) || !is_numeric($exclude)) {
             return false;
         }
@@ -325,7 +325,7 @@ class ProjectSubscription extends Subscription {
             return false;
         }
 
-        //Array to be returned
+        // Array to be returned
         $data = array();
 
         while ($row = $result->fetch_assoc()) {

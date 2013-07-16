@@ -176,7 +176,7 @@ class Issue extends Record {
      * @return Array
      */
     public static function getUserStats($aIDs) {
-        //Validate parameters
+        // Validate parameters
         if (!is_array($aIDs) || !count($aIDs)) {
             return false;
         }
@@ -186,14 +186,14 @@ class Issue extends Record {
                 $a[] = (int)$v;
             }
         }
-        //IF no IDs exist, return empty array
+        // IF no IDs exist, return empty array
         if (!count($a)) {
             return array();
         }
-        //List of IDs
+        // List of IDs
         $idList = implode(', ', $a);
 
-        //Gathers the statistics
+        // Gathers the statistics
         $query = "SELECT l.`login_id`, l.`realname`,"
                 ." SUM(IF(`type` = 'Feature' AND `status` != 'Abandoned', 1, 0)) as `featureCount`,"
                 ." SUM(IF(`type` = 'Bug' AND `status` != 'Abandoned', 1, 0)) as `bugCount`,"
@@ -207,16 +207,16 @@ class Issue extends Record {
             return false;
         }
 
-        //Constructs data array
+        // Constructs data array
         $data = array();
         while ($row = $result->fetch_assoc()) {
-            //Sets the login_id
+            // Sets the login_id
             $id = $row['login_id'];
-            //Sets null fields to 0
+            // Sets null fields to 0
             $data[$id]['featureCount']   = (int)$row['featureCount'];
             $data[$id]['bugCount']       = (int)$row['bugCount'];
             $data[$id]['abandonedCount'] = (int)$row['abandonedCount'];
-            //Calculates the total score
+            // Calculates the total score
             $data[$id]['totalScore'] =
                 $row['featureCount'] + (2 * $row['bugCount']) - $row['abandonedCount'];
             $data[$id]['realname'] = $row['realname'];
