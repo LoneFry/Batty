@@ -31,7 +31,8 @@ class SearchReport extends Report {
     protected static $query = '';
 
     protected static $vars = array(
-        'search'      => array('type' => 's', 'sql' => "(i.`description` LIKE '%%%1\$s%%' OR i.`label` LIKE '%%%1\$s%%' OR u.`comment` LIKE '%%%1\$s%%')"),
+        'search'      => array('type' => 's',
+           'sql' => "(i.`description` LIKE '%%%1\$s%%' OR i.`label` LIKE '%%%1\$s%%' OR u.`comment` LIKE '%%%1\$s%%')"),
         'priority'    => array('type' => 'a', 'values' => array(), 'sql' => "i.`priority` IN (%s)"),
         'status'      => array('type' => 'a', 'values' => array(), 'sql' => "i.`status` IN (%s)"),
         'project_id'  => array('type' => 'a', 'values' => array(), 'sql' => "i.`project_id` IN (%s)"),

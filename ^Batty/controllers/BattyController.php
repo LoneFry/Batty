@@ -26,6 +26,7 @@ require_once dirname(__DIR__).'/lib/functions.php';
  * @package  Batty
  * @author   LoneFry <dev@lonefry.com>
  * @license  Creative Commons CC-NC-BY-SA
+ * @link     http://github.com/LoneFry/Batty
  */
 class BattyController extends Controller {
     protected $action = 'home';
@@ -576,11 +577,9 @@ class BattyController extends Controller {
     /**
      * Subscribes users to a Project/Issue
      *
-     * @param array $argv Array of URL arguments
-     *
      * @return void
      */
-    public function do_subscribe($argv) {
+    public function do_subscribe() {
         if (!G::$S->roleTest(self::$role)) {
             die('0');
         }
@@ -619,6 +618,7 @@ class BattyController extends Controller {
     /**
      * Sends alert emails to issue subscribers
      *
+     * @param object $emails Email addresses to alert
      * @param object $issue  Issue object
      * @param object $update Update object
      *

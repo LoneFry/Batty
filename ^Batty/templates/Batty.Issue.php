@@ -259,4 +259,4 @@ if (isset($updates) && is_array($updates)) {
 </form>
 
 </div>
-<?php get_footer(); ?>
+<?php get_footer();

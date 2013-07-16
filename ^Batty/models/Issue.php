@@ -203,7 +203,7 @@ class Issue extends Record {
                 ." WHERE l.`login_id` IN ($idList)"
                 ." GROUP BY l.`login_id` ORDER BY l.`realname`"
                 ;
-        if ((false === $result=G::$m->query($query))) {
+        if ((false === $result = G::$m->query($query))) {
             return false;
         }
 

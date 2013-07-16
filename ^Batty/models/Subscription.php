@@ -216,8 +216,8 @@ class IssueSubscription extends Subscription {
     /**
      * Gets the subscriptions for an issue
      *
-     * @param int $issue_id
-     * @param int $exclude
+     * @param int $issue_id Issue Id
+     * @param int $exclude  A login_id to exclude
      *
      * @return array
      */
@@ -302,8 +302,8 @@ class ProjectSubscription extends Subscription {
     /**
      * Gets the subscriptions for a project
      *
-     * @param int $issue_id
-     * @param int $exclude
+     * @param int $project_id Project Id
+     * @param int $exclude    A login_id to exclude
      *
      * @return array
      */
