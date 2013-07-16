@@ -17,17 +17,17 @@ var Batty_XHR;
  * @return void
  */
 function Batty_Subscribe(data) {
-	Batty_XHR = window.ActiveXObject?new ActiveXObject("Microsoft.XMLHTTP")
-		:new XMLHttpRequest();
+    Batty_XHR = window.ActiveXObject?new ActiveXObject("Microsoft.XMLHTTP")
+        :new XMLHttpRequest();
 
-	//Set post string
-	var post = 'json=' + JSON.stringify(data);
+    //Set post string
+    var post = 'json=' + JSON.stringify(data);
 
-	Batty_XHR.open('POST', '/Batty/subscribe/', true);
-	Batty_XHR.onreadystatechange = Batty_Subscribe_;
-	Batty_XHR.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded');
-	Batty_XHR.setRequestHeader("Content-length", post.length);
-	Batty_XHR.send(post);
+    Batty_XHR.open('POST', '/Batty/subscribe/', true);
+    Batty_XHR.onreadystatechange = Batty_Subscribe_;
+    Batty_XHR.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded');
+    Batty_XHR.setRequestHeader("Content-length", post.length);
+    Batty_XHR.send(post);
 }
 
 /**
@@ -36,14 +36,14 @@ function Batty_Subscribe(data) {
  * @return void
  */
 function Batty_Subscribe_() {
-	if (Batty_XHR.readyState != 4) {
-		return;
-	}
-	if (Batty_XHR.responseText == "1") {
-		Batty_Ajax_Message.innerHTML = "Subscription saved.";
-	} else {
-		Batty_Ajax_Message.innerHTML = "Subscription failed.";
-	}
+    if (Batty_XHR.readyState != 4) {
+        return;
+    }
+    if (Batty_XHR.responseText == "1") {
+        Batty_Ajax_Message.innerHTML = "Subscription saved.";
+    } else {
+        Batty_Ajax_Message.innerHTML = "Subscription failed.";
+    }
 }
 
 /**
@@ -61,7 +61,7 @@ function checkAllClick(checkBox) {
    var boxes = document.getElementsByClassName(className);
 
    for (var i = 0; i < boxes.length; i++) {
-		boxes[i].checked = checkBox.checked;
+        boxes[i].checked = checkBox.checked;
    }
 }
 
@@ -77,20 +77,20 @@ function updateCheckAll(checkBox) {
    var checkFlag = true;
 
    if (checkBox.checked) {
-	   //Grabs every checkbox of the current class
-	   var boxes = document.getElementsByClassName(checkBox.className);
+       //Grabs every checkbox of the current class
+       var boxes = document.getElementsByClassName(checkBox.className);
 
-	   //Loops over every checkbox of the current class
-	   for (var i = 0; i < boxes.length; i++) {
-		   //"All" is checked, check box
-		   if (!boxes[i].checked) {
-			   checkFlag = false;
-			   break;
-		   }
-	   }
+       //Loops over every checkbox of the current class
+       for (var i = 0; i < boxes.length; i++) {
+           //"All" is checked, check box
+           if (!boxes[i].checked) {
+               checkFlag = false;
+               break;
+           }
+       }
    //Unchecks the "All" checkbox
    } else {
-	   checkFlag = false;
+       checkFlag = false;
    }
    //Checks/Unchecks the "All" checkbox
    document.getElementsByName(checkBox.className + "_checkAll")[0].checked = checkFlag;
