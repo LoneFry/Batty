@@ -130,6 +130,7 @@ class BattyController extends Controller {
             // Makes sure search has a value set
             if (G::$V->search) {
                 $Report->search = G::$V->search;
+                G::$V->_title  .= ' : "'.G::$V->search.'"';
             }
 
             // Loops over each optional field
@@ -201,7 +202,7 @@ class BattyController extends Controller {
         G::$V->login_id  = $user_id = $argv[1];
         G::$V->loginname = G::$V->users[$argv[1]];
 
-        G::$V->_title    = 'Batty : User';
+        G::$V->_title    = 'Batty : User : '.G::$V->loginname;
         G::$V->_template = 'Batty.User.php';
 
         require_once dirname(__DIR__).'/reports/IssueReport.php';
@@ -355,7 +356,7 @@ class BattyController extends Controller {
         G::$V->reporter   = !G::$V->issue->reporter_id ? new Login() : Login::byPK(G::$V->issue->reporter_id);
         G::$V->handler    = !G::$V->issue->handler_id ? new Login() : Login::byPK(G::$V->issue->handler_id);
         G::$V->updates    = Update::byIssue(G::$V->issue->issue_id);
-        G::$V->_title     = 'Batty : Issue';
+        G::$V->_title     = 'Batty : Issue #'.$issue->num;
         G::$V->_template  = 'Batty.Issue.php';
     }
 
@@ -464,7 +465,7 @@ class BattyController extends Controller {
             return $this->do_403($argv);
         }
 
-        G::$V->_title    = 'Batty : Projects';
+        G::$V->_title    = 'Batty : Manage Projects';
         G::$V->_template = 'Batty.Projects.php';
     }
 
@@ -526,7 +527,7 @@ class BattyController extends Controller {
         G::$V->subscr    = $subscr;
         G::$V->byProject = IssueReport::byProject($project->project_id);
         G::$V->project   = $project;
-        G::$V->_title    = 'Batty : Project';
+        G::$V->_title    = 'Batty : Project : '.$project->label;
         G::$V->_template = 'Batty.Project.php';
     }
 
