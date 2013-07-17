@@ -445,6 +445,8 @@ class BattyController extends Controller {
                     G::msg('Failed to save issue.', 'error');
                 }
             }
+        } else {
+            $issue->setAll($_GET);
         }
 
         G::$V->subscr     = $subscr;
