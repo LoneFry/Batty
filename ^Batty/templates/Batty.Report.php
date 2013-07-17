@@ -1,8 +1,7 @@
 <?php get_header(); ?>
 <div class="Batty_Body">
 
-    <h2>Batty : Report Issue</h2>
-
+    <h2><?php html($_title); ?></h2>
 
     <?php include_once 'Batty.nav.php'; ?>
     <form method="POST" action="/Batty/report">
