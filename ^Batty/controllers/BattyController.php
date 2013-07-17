@@ -122,15 +122,18 @@ class BattyController extends Controller {
             require_once dirname(__DIR__).'/reports/SearchReport.php';
 
             // Set search value
-            G::$V->search = trim($_GET['search']);
+            $search = trim($_GET['search']);
 
             // Create new SearchReport
             $Report = new SearchReport();
 
             // Makes sure search has a value set
-            if (G::$V->search) {
-                $Report->search = G::$V->search;
-                G::$V->_title  .= ' : "'.G::$V->search.'"';
+            if ($search) {
+                //Sets search string
+                $Report->search = G::$V->search = $search;
+
+                //Append the search string to title
+                G::$V->_title  .= ': '.$Report->search;
             }
 
             // Loops over each optional field

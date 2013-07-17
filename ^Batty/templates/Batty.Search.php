@@ -1,19 +1,19 @@
 <?php get_header(); ?>
 <div class="Batty_Body">
 
-    <h2><?php echo $_title; ?></h2>
+    <h2><?php html($_title); ?></h2>
     <?php include_once 'Batty.nav.php'; ?>
     <div class="Batty_section">
-<?php 
+<?php
 if (isset($results)) {
-    $aIssues = $results; 
+    $aIssues = $results;
 ?>
             <div class="Batty_section Batty_issueList">
-                <h3>Search Results<?php echo $search != ''?' For: "'.$search.'"':''; ?></h3>
+                <h3>Search Results</h3>
                 <?php include 'Batty.issueTable.php'; ?>
             </div>
-<?php 
-} 
+<?php
+}
 ?>
     </div>
 </div>

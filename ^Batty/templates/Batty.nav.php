@@ -8,7 +8,7 @@
         <form action="/Batty/search" method="GET">
             <div class="Batty_searchContainer">
                 <div id="Batty_searchForm">
-                    <input class="Batty_searchBox" type="text" name="search" value="<?php echo isset($search)?$search:''; ?>" />
+                    <input class="Batty_searchBox" type="text" name="search" value="<?php isset($search) ? html($search) : '' ; ?>" />
                     <input type="submit" value="Search" />
                 </div>
 

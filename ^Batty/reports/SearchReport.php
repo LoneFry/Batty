@@ -32,7 +32,7 @@ class SearchReport extends Report {
 
     protected static $vars = array(
         'search'      => array('type' => 's',
-           'sql' => "(i.`description` LIKE '%%%1\$s%%' OR i.`label` LIKE '%%%1\$s%%' OR u.`comment` LIKE '%%%1\$s%%')"),
+           'sql' => "(i.`description` REGEXP '%1\$s' OR i.`label` REGEXP '%1\$s' OR u.`comment` REGEXP '%1\$s')"),
         'priority'    => array('type' => 'a', 'values' => array(), 'sql' => "i.`priority` IN (%s)"),
         'status'      => array('type' => 'a', 'values' => array(), 'sql' => "i.`status` IN (%s)"),
         'project_id'  => array('type' => 'a', 'values' => array(), 'sql' => "i.`project_id` IN (%s)"),
@@ -57,6 +57,46 @@ class SearchReport extends Report {
             ." WHERE %s"
             ." GROUP BY i.`issue_id`"
             ;
+    }
+
+    /**
+     * Builds regular expression used in search
+     *
+     * @return string
+     */
+    public function search() {
+        if (0 < count($args = func_get_args())) {
+            //Initialize variables
+            $search  = $args[0];
+            $regEx   = '';
+            $str     = $search;
+
+            //Removes quoted portions from the main string
+            if (preg_match_all('/"([^"]+)"/', $str, $matches)) {
+                foreach ($matches[1] as $key => $match) {
+                    $str      = str_replace($matches[0][$key], '', $str);
+                    $regEx   .= $match.'|';
+                }
+            }
+
+            //Replace two spaces with one
+            $str = str_replace('  ', ' ', trim($str));
+
+            //Explode search string into array of words
+            $exp = explode(' ', $str);
+
+            //Loop over each word
+            foreach ($exp as $chunk) {
+                if ($chunk == '') {
+                    continue;
+                }
+                $regEx   .= $chunk.'|';
+            }
+
+            //Set regular expression
+            $this->vals['search'] = substr($regEx, 0, -1);
+        }
+        return $this->vals['search'];
     }
 
     /**
