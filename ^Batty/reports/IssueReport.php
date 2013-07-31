@@ -33,11 +33,11 @@ class IssueReport extends Report {
         'reporter_id' => array('type' => 'i', 'sql' => '`reporter_id` = %d'),
         'handler_id'  => array('type' => 'i', 'sql' => '`handler_id` = %d'),
         'open'        => array('type' => 'i',
-                               'sql' => '(`status` IN (\'New\', \'In Progress\', \'Under Review\') = %d)'),
+                               'sql' => '(`status` IN (\'New\', \'In Progress\', \'Under Review\', \'On Hold\') = %d)'),
     );
     protected $_orders = array('recordChanged', 'priority', 'status', 'type');
 
-    protected $_order = "(`status` IN ('Completed', 'Abandoned')), (`type` = 'Bug') DESC, `priority`, 'project_id'";
+    protected $_order = "(`status` IN ('Completed', 'Abandoned')), (`status` = 'On Hold'), (`type` = 'Bug') DESC, `priority`, 'project_id'";
 
     /**
      * Initializes static properties

@@ -36,7 +36,7 @@ class Issue extends Record {
         'type'          => array('type' => 'e', 'values' => array('Bug', 'Feature')),
         'priority'      => array('type' => 'i', 'min' => 1),
         'status'        => array(
-            'type' => 'e', 'values' => array('New', 'In Progress', 'Under Review', 'Completed', 'Abandoned'),
+            'type' => 'e', 'values' => array('New', 'In Progress', 'Under Review', 'Completed', 'Abandoned', 'On Hold'),
             'def'  => 'New'
         ),
         'reporter_id'   => array('type' => 'i', 'min' => 0),
