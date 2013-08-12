@@ -87,6 +87,8 @@ div.Batty_section h3 {
     font-family: monospace;
     font-size: 11pt;
     width: 828px;
+}
+.Batty_issueComment a {
     word-break: break-all;
 }
 
